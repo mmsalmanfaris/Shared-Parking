@@ -41,7 +41,7 @@ const Login = () => {
                                 />
                                 <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-700">Remember Me</label>
                             </div>
-                            <a href="#" className="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+                            <a href="forget-password" className="text-sm text-blue-600 hover:underline">Forgot Password?</a>
                         </div>
                         {/* Submit Button */}
                         <button
@@ -53,7 +53,7 @@ const Login = () => {
                         {/* Sign Up Link */}
                         <p className="text-sm text-gray-600">
                             Don't have an account?{" "}
-                            <a href="#" className="text-blue-600 hover:underline">Sign up here</a>
+                            <a href="register" className="text-blue-600 hover:underline">Sign up here</a>
                         </p>
                     </div>
                 </div>
