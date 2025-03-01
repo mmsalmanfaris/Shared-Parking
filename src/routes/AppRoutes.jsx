@@ -7,6 +7,7 @@ import Contact from "../pages/Contact";
 import Packages from "../pages/Packages";
 import Forget from "../pages/ForgetPassword";
 import Reset from "../pages/PasswordReset";
+import Dashboard from "../pages/Dashboard";
 
 
 const AppRoutes = () => {
@@ -20,6 +21,9 @@ const AppRoutes = () => {
             <Route path="/packages" element={<Packages />} />
             <Route path="/forget-password" element={<Forget />} Route />
             <Route path="/passwod-reset" element={<Reset />} Route />
+
+            {/* Dashboard */}
+            <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
     );
 };

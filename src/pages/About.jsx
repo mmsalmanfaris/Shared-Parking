@@ -5,79 +5,162 @@ const About = () => {
     return (
         <>
             <Header />
-            <section className="bg-white dark:bg-gray-900">
-                <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-                    <h2 className="mb-8 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Frequently asked questions</h2>
-                    <div className="grid pt-8 text-left border-t border-gray-200 md:gap-16 dark:border-gray-700 md:grid-cols-2">
-                        <div>
-                            <div className="mb-10">
-                                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                                    <svg className="flex-shrink-0 mr-2 w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    What do you mean by "Figma assets"?
-                                </h3>
-                                <p className="text-gray-500 dark:text-gray-400">You will have access to download the full Figma project including all of the pages, the components, responsive pages, and also the icons, illustrations, and images included in the screens.</p>
+
+            <section class="overflow-hidden bg-white py-8 sm:py-16">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+                        <div class="lg:pr-8 lg:pt-4">
+                            <div class="lg:max-w-lg mt-15">
+                                <h2 class="text-base font-semibold leading-7 text-blue-700">Park faster</h2>
+                                <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Redefining Smart Parking</p>
+                                <dl class="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
+                                    <div class="relative pl-9">
+                                        <dt class="inline font-semibold text-gray-900"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                            fill="currentColor" aria-hidden="true" class="absolute left-1 top-1 h-5 w-5 text-blue-700">
+                                            <path
+                                                d="M3.196 12.87l-.825.483a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.758 0l7.25-4.25a.75.75 0 000-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 01-2.276 0L3.196 12.87z">
+                                            </path>
+                                            <path
+                                                d="M3.196 8.87l-.825.483a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.758 0l7.25-4.25a.75.75 0 000-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 01-2.276 0L3.196 8.87z">
+                                            </path>
+                                            <path
+                                                d="M10.38 1.103a.75.75 0 00-.76 0l-7.25 4.25a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.76 0l7.25-4.25a.75.75 0 000-1.294l-7.25-4.25z">
+                                            </path>
+                                        </svg>Template driven
+                                        </dt>
+                                        <dd class="inline">Inspired by Sendgrid, Mailchimp, and Postmark, we allow you to create and apply
+                                            templated content to your media.
+                                        </dd>
+                                    </div>
+                                    <div class="relative pl-9">
+                                        <dt class="inline font-semibold text-gray-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
+                                                class="absolute left-1 top-1 h-5 w-5 text-blue-700">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.5 17a4.5 4.5 0 01-1.44-8.765 4.5 4.5 0 018.302-3.046 3.5 3.5 0 014.504 4.272A4 4 0 0115 17H5.5zm3.75-2.75a.75.75 0 001.5 0V9.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0l-3.25 3.5a.75.75 0 101.1 1.02l1.95-2.1v4.59z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            Simple, REST
+                                        </dt>
+                                        <dd class="inline">A simple REST API that allows you to create, generate, and manage your content.</dd>
+                                    </div>
+                                    <div class="relative pl-9">
+                                        <dt class="inline font-semibold text-gray-900"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                            fill="currentColor" aria-hidden="true" class="absolute left-1 top-1 h-5 w-5 text-blue-700">
+                                            <path fill-rule="evenodd"
+                                                d="M14.5 10a4.5 4.5 0 004.284-5.882c-.105-.324-.51-.391-.752-.15L15.34 6.66a.454.454 0 01-.493.11 3.01 3.01 0 01-1.618-1.616.455.455 0 01.11-.494l2.694-2.692c.24-.241.174-.647-.15-.752a4.5 4.5 0 00-5.873 4.575c.055.873-.128 1.808-.8 2.368l-7.23 6.024a2.724 2.724 0 103.837 3.837l6.024-7.23c.56-.672 1.495-.855 2.368-.8.096.007.193.01.291.01zM5 16a1 1 0 11-2 0 1 1 0 012 0z"
+                                                clip-rule="evenodd"></path>
+                                            <path
+                                                d="M14.5 11.5c.173 0 .345-.007.514-.022l3.754 3.754a2.5 2.5 0 01-3.536 3.536l-4.41-4.41 2.172-2.607c.052-.063.147-.138.342-.196.202-.06.469-.087.777-.067.128.008.257.012.387.012zM6 4.586l2.33 2.33a.452.452 0 01-.08.09L6.8 8.214 4.586 6H3.309a.5.5 0 01-.447-.276l-1.7-3.402a.5.5 0 01.093-.577l.49-.49a.5.5 0 01.577-.094l3.402 1.7A.5.5 0 016 3.31v1.277z">
+                                            </path>
+                                        </svg>Developer friendly </dt>
+                                        <dd class="inline">Documented and easy to use, we make it easy to integrate with your existing workflow.
+                                        </dd>
+                                    </div>
+                                </dl>
                             </div>
-                            <div className="mb-10">
-                                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                                    <svg className="flex-shrink-0 mr-2 w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    What does "lifetime access" exactly mean?
-                                </h3>
-                                <p className="text-gray-500 dark:text-gray-400">Once you have purchased either the design, code, or both packages, you will have access to all of the future updates based on the roadmap, free of charge.</p>
+                            <div class="mt-10 flex items-center gap-x-6">
+                                <a href="#"
+                                    class="rounded-md bg-blue-700 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800  focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Start
+                                    for one month
+                                </a>
+                                <a href="#" class="text-sm font-semibold leading-6 text-gray-700">Free Package
+                                    <span aria-hidden="true">→</span>
+                                </a>
                             </div>
-                            <div className="mb-10">
-                                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                                    <svg className="flex-shrink-0 mr-2 w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    How does support work?
-                                </h3>
-                                <p className="text-gray-500 dark:text-gray-400">We're aware of the importance of well qualified support, that is why we decided that support will only be provided by the authors that actually worked on this project.</p>
-                                <p className="text-gray-500 dark:text-gray-400">Feel free to <a href="#" className="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline" target="_blank" rel="noreferrer">contact us</a> and we'll help you out as soon as we can.</p>
-                            </div>
-                            <div className="mb-10">
-                                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                                    <svg className="flex-shrink-0 mr-2 w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    I want to build more than one project. Is that allowed?
-                                </h3>
-                                <p className="text-gray-500 dark:text-gray-400">You can use Windster for an unlimited amount of projects, whether it's a personal website, a SaaS app, or a website for a client. As long as you don't build a product that will directly compete with Windster either as a UI kit, theme, or template, it's fine.</p>
-                                <p className="text-gray-500 dark:text-gray-400">Find out more information by <a href="#" className="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline">reading the license</a>.</p>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="mb-10">
-                                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                                    <svg className="flex-shrink-0 mr-2 w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    What does "free updates" include?
-                                </h3>
-                                <p className="text-gray-500 dark:text-gray-400">The free updates that will be provided is based on the <a href="#" className="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline">roadmap</a> that we have laid out for this project. It is also possible that we will provide extra updates outside of the roadmap as well.</p>
-                            </div>
-                            <div className="mb-10">
-                                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                                    <svg className="flex-shrink-0 mr-2 w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    What does the free version include?
-                                </h3>
-                                <p className="text-gray-500 dark:text-gray-400">The <a href="#" className="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline">free version</a> of Windster includes a minimal style guidelines, component variants, and a dashboard page with the mobile version alongside it.</p>
-                                <p className="text-gray-500 dark:text-gray-400">You can use this version for any purposes, because it is open-source under the MIT license.</p>
-                            </div>
-                            <div className="mb-10">
-                                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                                    <svg className="flex-shrink-0 mr-2 w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    What is the difference between Windster and Tailwind UI?
-                                </h3>
-                                <p className="text-gray-500 dark:text-gray-400">Although both Windster and Tailwind UI are built for integration with Tailwind CSS, the main difference is in the design, the pages, the extra components and UI elements that Windster includes.</p>
-                                <p className="text-gray-500 dark:text-gray-400">Additionally, Windster is a project that is still in development, and later it will include both the application, marketing, and e-commerce UI interfaces.</p>
-                            </div>
-                            <div className="mb-10">
-                                <h3 className="flex items-center mb-4 text-lg font-medium text-gray-900 dark:text-white">
-                                    <svg className="flex-shrink-0 mr-2 w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
-                                    Can I use Windster in open-source projects?
-                                </h3>
-                                <p className="text-gray-500 dark:text-gray-400">Generally, it is accepted to use Windster in open-source projects, as long as it is not a UI library, a theme, a template, a page-builder that would be considered as an alternative to Windster itself.</p>
-                                <p className="text-gray-500 dark:text-gray-400">With that being said, feel free to use this design kit for your open-source projects.</p>
-                                <p className="text-gray-500 dark:text-gray-400">Find out more information by <a href="#" className="font-medium underline text-primary-600 dark:text-primary-500 hover:no-underline">reading the license</a>.</p>
-                            </div>
-                        </div>
+                        </div><img src="https://plus.unsplash.com/premium_photo-1661916866784-cdea580d93f7?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product screenshot" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1000" />
                     </div>
                 </div>
             </section>
+
+
+            <section>
+                <section class=" my-20">
+                    <div class="py-12 bg-white">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                            <div class="lg:text-center">
+                                <h2
+                                    class="font-heading mb-4 bg-orange-100 text-orange-800 px-4 py-2 rounded-lg md:w-64 md:mx-auto text-xs font-semibold tracking-widest text-black uppercase title-font">
+                                    Why choose us?
+                                </h2>
+                                <p class="font-heading mt-2 text-3xl leading-8 font-semibold tracking-tight text-gray-900 sm:text-4xl">
+                                    We know tech, we know finance. We are fintech experts.
+                                </p>
+                                <p class="mt-4 max-w-2xl text-lg text-gray-500 lg:mx-auto">
+                                    We know how to handle taxation for all the
+                                    countried we operate in. We care for our customers and help them manage cashflows.
+                                </p>
+                            </div>
+
+                            <div class="mt-10">
+                                <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+                                    <div class="relative">
+                                        <dt>
+                                            <div
+                                                class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary-500 text-white">
+                                                <img src="https://www.svgrepo.com/show/503163/api-settings.svg" />
+                                            </div>
+                                            <p class="font-heading ml-16 text-lg leading-6 font-bold text-gray-700">Automated Parking</p>
+                                        </dt>
+                                        <dd class="mt-2 ml-16 text-base text-gray-500">
+                                            Lorem ipsum, dolor sit amet consectetur
+                                            adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
+                                            blanditiis ratione.
+                                        </dd>
+                                    </div>
+                                    <div class="relative">
+                                        <dt>
+                                            <div
+                                                class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary-500 text-white">
+                                                <img src="https://www.svgrepo.com/show/503138/webpack.svg" />
+                                            </div>
+                                            <p class="font-heading ml-16 text-lg leading-6 font-bold text-gray-700">Flexible Payments
+                                            </p>
+                                        </dt>
+                                        <dd class="mt-2 ml-16 text-base text-gray-500"> Lorem ipsum, dolor sit amet consectetur
+                                            adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
+                                            blanditiis ratione.
+                                        </dd>
+                                    </div>
+                                    <div class="relative">
+                                        <dt>
+                                            <div
+                                                class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary-500 text-white">
+                                                <img src="https://www.svgrepo.com/show/511771/dashboard-671.svg" />
+
+                                            </div>
+                                            <p class="font-heading ml-16 text-lg leading-6 font-bold text-gray-700">Free one day Trail
+                                            </p>
+                                        </dt>
+                                        <dd class="mt-2 ml-16 text-base text-gray-500"> Lorem ipsum, dolor sit amet consectetur
+                                            adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
+                                            blanditiis ratione.
+                                        </dd>
+                                    </div>
+                                    <div class="relative">
+                                        <dt>
+                                            <div
+                                                class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary-500 text-white">
+                                                <img src="https://www.svgrepo.com/show/76267/free-commercial-label.svg" />
+
+                                            </div>
+                                            <p class="font-heading ml-16 text-lg leading-6 font-bold text-gray-700">Multiple Vehicles
+                                            </p>
+                                        </dt>
+                                        <dd class="mt-2 ml-16 text-base text-gray-500"> Lorem ipsum, dolor sit amet consectetur
+                                            adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
+                                            blanditiis ratione.
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+            </section>
+
             <Footer />
         </>
     )
