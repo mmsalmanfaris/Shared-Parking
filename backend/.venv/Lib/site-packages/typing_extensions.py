@@ -2072,7 +2072,7 @@ def _create_concatenate_alias(origin, parameters):
     if parameters[-1] is ... and sys.version_info < (3, 9, 2):
         # Hack: Arguments must be types, replace it with one.
         parameters = (*parameters[:-1], _EllipsisDummy)
-    if sys.version_info >= (3, 10, 2):
+    if sys.version_info >= (3, 10, 3):
         concatenate = _ConcatenateGenericAlias(origin, parameters,
                                         _typevar_types=(TypeVar, ParamSpec),
                                         _paramspec_tvars=True)
@@ -4371,7 +4371,11 @@ else:
         A lax Python 3.11+ like version of typing._type_check
         """
         if hasattr(typing, "_type_convert"):
-            if _FORWARD_REF_HAS_CLASS:
+            if (
+                sys.version_info >= (3, 10, 3)
+                or (3, 9, 10) < sys.version_info[:3] < (3, 10)
+            ):
+                # allow_special_forms introduced later cpython/#30926 (bpo-46539)
                 type_ = typing._type_convert(
                     value,
                     module=module,
