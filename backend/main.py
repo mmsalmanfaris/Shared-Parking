@@ -1,53 +1,98 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
+from fastapi import FastAPI, HTTPException
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 app = FastAPI()
 
-# Enable CORS for communication with React frontend
-origins = [
-    "http://localhost:3000",  # React frontend URL
-]
+# Initialize Firebase Admin SDK
+cred = credentials.Certificate("final-project-5c102-firebase-adminsdk-fbsvc-db3f030fd6.json")  # Path to your JSON file
+firebase_admin.initialize_app(cred)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Get a reference to Firestore
+db = firestore.client()
 
-# Sample API endpoint: Fetch parking slots
-@app.get("/parking-slots/")
-def get_parking_slots():
-    # Simulate parking slot data
-    parking_slots = {
-        "slot_1": {"status": "available"},
-        "slot_2": {"status": "occupied"},
-        "slot_3": {"status": "available"},
-    }
-    return parking_slots
+# Test Endpoint
+@app.get("/")
+def read_root():
+    return {"message": "FastAPI connected to Firestore!"}
 
-# Sample API endpoint: User login
-@app.post("/login/")
-def login(username: str, password: str):
-    # Simulate user authentication
-    if username == "admin" and password == "password":
-        return {"message": "Login successful", "role": "admin"}
-    elif username == "user" and password == "password":
-        return {"message": "Login successful", "role": "user"}
-    else:
-        return {"message": "Invalid credentials"}
+# Example: Fetch all admins from Firestore
+@app.get("/admins/")
+def get_admins():
+    try:
+        # Query the 'Admin' collection
+        docs = db.collection("Admin").stream()
+        admins = []
+        for doc in docs:
+            admin_data = doc.to_dict()
+            admin_data["id"] = doc.id  # Include the document ID
+            admins.append(admin_data)
+        return {"admins": admins}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching admins: {str(e)}")
 
-# Sample API endpoint: Admin dashboard data
-@app.get("/admin-dashboard/")
-def admin_dashboard():
-    # Simulate admin-specific data
-    return {
-        "total_users": 100,
-        "total_parking_spaces": 50,
-        "occupied_spaces": 20,
-    }
+# Example: Fetch a specific admin by ID
+@app.get("/admin/{admin_id}")
+def get_admin(admin_id: str):
+    try:
+        # Get a specific document from the 'Admin' collection
+        doc_ref = db.collection("Admin").document(admin_id)
+        doc = doc_ref.get()
+        if doc.exists:
+            admin_data = doc.to_dict()
+            admin_data["id"] = doc.id
+            return {"admin": admin_data}
+        else:
+            raise HTTPException(status_code=404, detail="Admin not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching admin: {str(e)}")
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+# Example: Add a new admin to Firestore
+@app.post("/admin/")
+def add_admin(name: str, email: str, password: str):
+    try:
+        # Add a new document to the 'Admin' collection
+        doc_ref = db.collection("Admin").document()
+        doc_ref.set({
+            "name": name,
+            "email": email,
+            "password": password,
+            "created_at": firestore.SERVER_TIMESTAMP
+        })
+        return {"message": f"Admin added successfully with ID: {doc_ref.id}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error adding admin: {str(e)}")
+
+# Example: Update an existing admin
+@app.put("/admin/{admin_id}")
+def update_admin(admin_id: str, name: str, email: str, password: str):
+    try:
+        # Update an existing document in the 'Admin' collection
+        doc_ref = db.collection("Admin").document(admin_id)
+        doc = doc_ref.get()
+        if doc.exists:
+            doc_ref.update({
+                "name": name,
+                "email": email,
+                "password": password
+            })
+            return {"message": f"Admin updated successfully: {admin_id}"}
+        else:
+            raise HTTPException(status_code=404, detail="Admin not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating admin: {str(e)}")
+
+# Example: Delete an admin
+@app.delete("/admin/{admin_id}")
+def delete_admin(admin_id: str):
+    try:
+        # Delete a document from the 'Admin' collection
+        doc_ref = db.collection("Admin").document(admin_id)
+        doc = doc_ref.get()
+        if doc.exists:
+            doc_ref.delete()
+            return {"message": f"Admin deleted successfully: {admin_id}"}
+        else:
+            raise HTTPException(status_code=404, detail="Admin not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting admin: {str(e)}")
