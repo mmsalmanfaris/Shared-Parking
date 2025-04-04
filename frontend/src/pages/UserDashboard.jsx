@@ -117,7 +117,10 @@ const UserDashboard = () => {
 
             {/* Main Content */}
             <main className="flex-1 p-6 bg-gray-100">
-                <h1 className="text-2xl font-semibold text-gray-900">Welcome, Salman Faris!</h1>
+                <div className="flex justify-between">
+                    <h1 className="text-2xl font-semibold text-gray-900">Welcome, Salman Faris!</h1>
+                    <button className="bg-red-700 text-white py-2 px-4 rounded-4xl hover:text-black hover:shadow-2xl">Logout</button>
+                </div>
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Profile Card */}
                     <div className="bg-white p-6 rounded-lg shadow-md">

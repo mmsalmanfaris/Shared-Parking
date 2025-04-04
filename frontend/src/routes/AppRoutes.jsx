@@ -7,7 +7,19 @@ import Contact from "../pages/Contact";
 import Packages from "../pages/Packages";
 import Forget from "../pages/ForgetPassword";
 import Reset from "../pages/PasswordReset";
-import AdminDashboard from "../pages/AdminDashboard";
+
+
+// Admin Dashboard
+import AdminDashboard from "../pages/adminDasboard/overview";
+import AdminActivites from "../pages/adminDasboard/activites";
+import AdminPayments from "../pages/adminDasboard/payments";
+import AdminPackages from "../pages/adminDasboard/packages";
+import AdminUsers from "../pages/adminDasboard/users";
+import AdminReports from "../pages/adminDasboard/reports";
+import AdminDevices from "../pages/adminDasboard/devices";
+import AdminAlert from "../pages/adminDasboard/alerts";
+
+// User Dashboard
 import UserDashboard from "../pages/UserDashboard";
 
 
@@ -23,8 +35,18 @@ const AppRoutes = () => {
             <Route path="/forget-password" element={<Forget />} Route />
             <Route path="/passwod-reset" element={<Reset />} Route />
 
-            {/* Dashboard */}
+            {/* Admin Dashboard */}
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="admin-dashboard/activities" element={<AdminActivites />} />
+            <Route path="admin-dashboard/payments" element={<AdminPayments />} />
+            <Route path="admin-dashboard/packages" element={<AdminPackages />} />
+            <Route path="admin-dashboard/users" element={<AdminUsers />} />
+            <Route path="admin-dashboard/reports" element={<AdminReports />} />
+            <Route path="admin-dashboard/devices" element={<AdminDevices />} />
+            <Route path="admin-dashboard/alerts" element={<AdminAlert />} />
+
+
+
             <Route path="/user-dashboard" element={<UserDashboard />} />
         </Routes>
     );
