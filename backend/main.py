@@ -1,98 +1,94 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, auth, firestore
+from pydantic import BaseModel
 
 app = FastAPI()
+
+# Define allowed origins
+origins = [
+    "http://localhost:5173",  # React Vite app
+    "http://127.0.0.1:5173",  # Alternative localhost
+]
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Allow requests from the React frontend
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate("final-project-5c102-firebase-adminsdk-fbsvc-db3f030fd6.json")  # Path to your JSON file
 firebase_admin.initialize_app(cred)
 
-# Get a reference to Firestore
+# Get Firestore client
 db = firestore.client()
 
-# Test Endpoint
-@app.get("/")
-def read_root():
-    return {"message": "FastAPI connected to Firestore!"}
+# Define a Pydantic model for the request body
+class RegisterRequest(BaseModel):
+    full_name: str
+    nic: str
+    address: str
+    contact: str
+    email: str
+    password: str
+    vehicle_brand: str
+    vehicle_model: str
+    car_color: str
+    plate_number: str
 
-# Example: Fetch all admins from Firestore
-@app.get("/admins/")
-def get_admins():
+@app.post("/register/")
+def register(request_body: RegisterRequest):
     try:
-        # Query the 'Admin' collection
-        docs = db.collection("Admin").stream()
-        admins = []
-        for doc in docs:
-            admin_data = doc.to_dict()
-            admin_data["id"] = doc.id  # Include the document ID
-            admins.append(admin_data)
-        return {"admins": admins}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching admins: {str(e)}")
+        # Extract data from the request body
+        full_name = request_body.full_name
+        nic = request_body.nic
+        address = request_body.address
+        contact = request_body.contact
+        email = request_body.email
+        password = request_body.password
+        vehicle_brand = request_body.vehicle_brand
+        vehicle_model = request_body.vehicle_model
+        car_color = request_body.car_color
+        plate_number = request_body.plate_number
 
-# Example: Fetch a specific admin by ID
-@app.get("/admin/{admin_id}")
-def get_admin(admin_id: str):
-    try:
-        # Get a specific document from the 'Admin' collection
-        doc_ref = db.collection("Admin").document(admin_id)
-        doc = doc_ref.get()
-        if doc.exists:
-            admin_data = doc.to_dict()
-            admin_data["id"] = doc.id
-            return {"admin": admin_data}
-        else:
-            raise HTTPException(status_code=404, detail="Admin not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching admin: {str(e)}")
+        # Create a new user in Firebase Authentication
+        user = auth.create_user(
+            email=email,
+            password=password
+        )
 
-# Example: Add a new admin to Firestore
-@app.post("/admin/")
-def add_admin(name: str, email: str, password: str):
-    try:
-        # Add a new document to the 'Admin' collection
-        doc_ref = db.collection("Admin").document()
-        doc_ref.set({
-            "name": name,
+        # Store customer details in Firestore
+        customer_data = {
+            "full_name": full_name,
+            "nic": nic,
+            "address": address,
+            "contact": contact,
             "email": email,
-            "password": password,
             "created_at": firestore.SERVER_TIMESTAMP
-        })
-        return {"message": f"Admin added successfully with ID: {doc_ref.id}"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error adding admin: {str(e)}")
+        }
 
-# Example: Update an existing admin
-@app.put("/admin/{admin_id}")
-def update_admin(admin_id: str, name: str, email: str, password: str):
-    try:
-        # Update an existing document in the 'Admin' collection
-        doc_ref = db.collection("Admin").document(admin_id)
-        doc = doc_ref.get()
-        if doc.exists:
-            doc_ref.update({
-                "name": name,
-                "email": email,
-                "password": password
-            })
-            return {"message": f"Admin updated successfully: {admin_id}"}
-        else:
-            raise HTTPException(status_code=404, detail="Admin not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating admin: {str(e)}")
+        # Add the customer data to the 'Customer' collection
+        db.collection("Customer").document(user.uid).set(customer_data)
 
-# Example: Delete an admin
-@app.delete("/admin/{admin_id}")
-def delete_admin(admin_id: str):
-    try:
-        # Delete a document from the 'Admin' collection
-        doc_ref = db.collection("Admin").document(admin_id)
-        doc = doc_ref.get()
-        if doc.exists:
-            doc_ref.delete()
-            return {"message": f"Admin deleted successfully: {admin_id}"}
-        else:
-            raise HTTPException(status_code=404, detail="Admin not found")
+        # Store vehicle details in Firestore with a reference to the customer ID
+        vehicle_data = {
+            "customer_id": user.uid,  # Reference to the customer
+            "brand": vehicle_brand,
+            "model": vehicle_model,
+            "color": car_color,
+            "plate_number": plate_number,
+            "created_at": firestore.SERVER_TIMESTAMP
+        }
+
+        # Add the vehicle data to the 'Vehicle' collection
+        db.collection("Vehicle").add(vehicle_data)  # Use .add() to generate a unique document ID
+
+        return {"message": "Registration successful", "user_id": user.uid}
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error deleting admin: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Error during registration: {str(e)}")
