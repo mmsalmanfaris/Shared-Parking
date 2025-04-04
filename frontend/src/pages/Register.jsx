@@ -4,46 +4,55 @@ import Footer from "@/components/Footer";
 import registerImage from "../assets/images/register/register.jpg";
 
 const Register = () => {
+    // Initialize form data with empty strings
     const [formData, setFormData] = useState({
-        "full_name": "Salman Faris",
-        "nic": "123456789",
-        "address": "Colombo",
-        "contact": "0761754242",
-        "email": "salman@gmail.com",
-        "password": "salman123",
-        "vehicle_brand": "BMW",
-        "vehicle_model": "X5",
-        "car_color": "Red",
-        "plate_number": "ABC123"
+        full_name: "",
+        nic: "",
+        address: "",
+        contact: "",
+        email: "",
+        password: "",
+        vehicle_brand: "",
+        vehicle_model: "",
+        car_color: "",
+        plate_number: ""
     });
 
+    // Error state for displaying error messages
     const [error, setError] = useState("");
 
+    // Loading state to indicate form submission progress
+    const [loading, setLoading] = useState(false);
+
+    // Handle input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const [loading, setLoading] = useState(false);
-
+    // Handle form submission
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent default form submission behavior
         setLoading(true); // Start loading
+
         try {
-            const response = await fetch("http://127.0.0.1:8000/register/", {
+            // Send registration request to FastAPI backend
+            const response = await fetch("http://127.0.0.1:8000/customer/register/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
             });
+
             const data = await response.json();
+
             if (response.ok) {
                 alert("Registration successful!");
-                window.location.href = "/login";
+                window.location.href = "/login"; // Redirect to login page
             } else {
-                setError(data.detail || "Registration failed");
+                setError(data.detail || "Registration failed. Please check your details and try again.");
             }
         } catch (err) {
-            setError("An error occurred. Please try again.");
+            setError("An unexpected error occurred. Please try again later.");
         } finally {
             setLoading(false); // Stop loading
         }
@@ -52,15 +61,17 @@ const Register = () => {
     return (
         <>
             <Header />
-            <form onSubmit={handleSubmit}>
-                <div className="flex justify-center items-center min-h-screen my-20">
-                    <div className="flex gap-8 max-w-6xl w-full border rounded-2xl overflow-hidden">
-                        {/* Form Content */}
-                        <div className="p-10 flex-1">
+            <div className="flex justify-center items-center min-h-screen my-20">
+                <div className="flex gap-8 max-w-6xl w-full border rounded-2xl overflow-hidden">
+                    {/* Form Content */}
+                    <div className="p-10 flex-1">
+                        <form onSubmit={handleSubmit}>
                             <div className="grid gap-6 mb-6 md:grid-cols-2">
                                 {/* Full Name */}
                                 <div>
-                                    <label htmlFor="full_name" className="block mb-2 text-sm font-medium text-gray-700">Full Name</label>
+                                    <label htmlFor="full_name" className="block mb-2 text-sm font-medium text-gray-700">
+                                        Full Name
+                                    </label>
                                     <input
                                         type="text"
                                         id="full_name"
@@ -72,9 +83,12 @@ const Register = () => {
                                         required
                                     />
                                 </div>
+
                                 {/* NIC */}
                                 <div>
-                                    <label htmlFor="nic" className="block mb-2 text-sm font-medium text-gray-700">National Identity Card</label>
+                                    <label htmlFor="nic" className="block mb-2 text-sm font-medium text-gray-700">
+                                        National Identity Card
+                                    </label>
                                     <input
                                         type="text"
                                         id="nic"
@@ -86,9 +100,12 @@ const Register = () => {
                                         required
                                     />
                                 </div>
+
                                 {/* Address */}
                                 <div>
-                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-700">House Address</label>
+                                    <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-700">
+                                        House Address
+                                    </label>
                                     <input
                                         type="text"
                                         id="address"
@@ -100,9 +117,12 @@ const Register = () => {
                                         required
                                     />
                                 </div>
+
                                 {/* Contact */}
                                 <div>
-                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-700">Contact</label>
+                                    <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-700">
+                                        Contact
+                                    </label>
                                     <input
                                         type="tel"
                                         id="contact"
@@ -114,9 +134,12 @@ const Register = () => {
                                         required
                                     />
                                 </div>
+
                                 {/* Email */}
                                 <div>
-                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">Email Address</label>
+                                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">
+                                        Email Address
+                                    </label>
                                     <input
                                         type="email"
                                         id="email"
@@ -128,9 +151,12 @@ const Register = () => {
                                         required
                                     />
                                 </div>
+
                                 {/* Password */}
                                 <div>
-                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-700">Password</label>
+                                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-700">
+                                        Password
+                                    </label>
                                     <input
                                         type="password"
                                         id="password"
@@ -142,9 +168,12 @@ const Register = () => {
                                         required
                                     />
                                 </div>
+
                                 {/* Vehicle Brand */}
                                 <div>
-                                    <label htmlFor="vehicle_brand" className="block mb-2 text-sm font-medium text-gray-700">Vehicle Brand</label>
+                                    <label htmlFor="vehicle_brand" className="block mb-2 text-sm font-medium text-gray-700">
+                                        Vehicle Brand
+                                    </label>
                                     <input
                                         type="text"
                                         id="vehicle_brand"
@@ -156,9 +185,12 @@ const Register = () => {
                                         required
                                     />
                                 </div>
+
                                 {/* Vehicle Model */}
                                 <div>
-                                    <label htmlFor="vehicle_model" className="block mb-2 text-sm font-medium text-gray-700">Vehicle Model</label>
+                                    <label htmlFor="vehicle_model" className="block mb-2 text-sm font-medium text-gray-700">
+                                        Vehicle Model
+                                    </label>
                                     <input
                                         type="text"
                                         id="vehicle_model"
@@ -170,9 +202,12 @@ const Register = () => {
                                         required
                                     />
                                 </div>
+
                                 {/* Car Color */}
                                 <div>
-                                    <label htmlFor="car_color" className="block mb-2 text-sm font-medium text-gray-700">Car Color</label>
+                                    <label htmlFor="car_color" className="block mb-2 text-sm font-medium text-gray-700">
+                                        Car Color
+                                    </label>
                                     <input
                                         type="text"
                                         id="car_color"
@@ -184,9 +219,12 @@ const Register = () => {
                                         required
                                     />
                                 </div>
+
                                 {/* Plate Number */}
                                 <div>
-                                    <label htmlFor="plate_number" className="block mb-2 text-sm font-medium text-gray-700">Plate Number</label>
+                                    <label htmlFor="plate_number" className="block mb-2 text-sm font-medium text-gray-700">
+                                        Plate Number
+                                    </label>
                                     <input
                                         type="text"
                                         id="plate_number"
@@ -199,6 +237,7 @@ const Register = () => {
                                     />
                                 </div>
                             </div>
+
                             {/* Terms and Conditions */}
                             <div className="flex items-start mb-6">
                                 <div className="flex items-center h-5">
@@ -209,8 +248,11 @@ const Register = () => {
                                         required
                                     />
                                 </div>
-                                <label htmlFor="terms" className="ms-2 text-sm font-medium text-gray-700">I agree with the <a href="#" className="text-blue-600 hover:underline">terms and conditions</a>.</label>
+                                <label htmlFor="terms" className="ms-2 text-sm font-medium text-gray-700">
+                                    I agree with the <a href="#" className="text-blue-600 hover:underline">terms and conditions</a>.
+                                </label>
                             </div>
+
                             {/* Submit Button */}
                             <button
                                 type="submit"
@@ -219,16 +261,19 @@ const Register = () => {
                             >
                                 {loading ? "Submitting..." : "Submit"}
                             </button>
-                        </div>
-                        {/* Image Section */}
-                        <div className="w-110 hidden lg:block">
-                            <img src={registerImage} alt="Register" className="object-cover h-full w-full" />
-                        </div>
+                        </form>
+                    </div>
+
+                    {/* Image Section */}
+                    <div className="w-110 hidden lg:block">
+                        <img src={registerImage} alt="Register" className="object-cover h-full w-full" />
                     </div>
                 </div>
-            </form >
-            {error && <p className="text-red-500 text-center">{error}</p>
-            }
+            </div>
+
+            {/* Display Error Message */}
+            {error && <p className="text-red-500 text-center">{error}</p>}
+
             <Footer />
         </>
     );
