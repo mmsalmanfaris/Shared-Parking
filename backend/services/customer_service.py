@@ -25,7 +25,7 @@ def create_customer(customer_data: CustomerModel):
             "address": customer_data.address,
             "contact": customer_data.contact,
             "email": customer_data.email,
-            "created_at": firestore.SERVER_TIMESTAMP.isoformate()
+            "created_at": firestore.SERVER_TIMESTAMP
         })
 
         # Store vehicle details in Firestore with a reference to the customer ID
@@ -36,7 +36,7 @@ def create_customer(customer_data: CustomerModel):
             "model": customer_data.vehicle_model,
             "color": customer_data.car_color,
             "plate_number": customer_data.plate_number,
-            "created_at": firestore.SERVER_TIMESTAMP.isoformate()
+            "created_at": firestore.SERVER_TIMESTAMP
         })
 
         return {"message": "Customer created successfully", "customer_id": user.uid}  # Return user.uid

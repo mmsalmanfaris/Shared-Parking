@@ -13,7 +13,7 @@ const Login = () => {
 
         try {
             // Send login request to FastAPI backend
-            const response = await fetch("http://127.0.0.1:8000/login/", {
+            const response = await fetch("http://127.0.0.1:8000/auth/login/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -25,7 +25,7 @@ const Login = () => {
                 // Redirect based on user role
                 if (data.role === "admin") {
                     window.location.href = "/admin-dashboard";
-                } else if (data.role === "customer") {
+                } else if (data.role === "user") {
                     window.location.href = "/user-dashboard";
                 }
             } else {
