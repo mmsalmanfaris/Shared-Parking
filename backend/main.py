@@ -1,53 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
+from routers import customer_router
+from routers.auth_router import router as auth_router
 
 app = FastAPI()
 
-# Enable CORS for communication with React frontend
-origins = [
-    "http://localhost:3000",  # React frontend URL
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*",]
 )
 
-# Sample API endpoint: Fetch parking slots
-@app.get("/parking-slots/")
-def get_parking_slots():
-    # Simulate parking slot data
-    parking_slots = {
-        "slot_1": {"status": "available"},
-        "slot_2": {"status": "occupied"},
-        "slot_3": {"status": "available"},
-    }
-    return parking_slots
+app.include_router(customer_router.router, prefix="/customer", tags=["Customers"])
+app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 
-# Sample API endpoint: User login
-@app.post("/login/")
-def login(username: str, password: str):
-    # Simulate user authentication
-    if username == "admin" and password == "password":
-        return {"message": "Login successful", "role": "admin"}
-    elif username == "user" and password == "password":
-        return {"message": "Login successful", "role": "user"}
-    else:
-        return {"message": "Invalid credentials"}
-
-# Sample API endpoint: Admin dashboard data
-@app.get("/admin-dashboard/")
-def admin_dashboard():
-    # Simulate admin-specific data
-    return {
-        "total_users": 100,
-        "total_parking_spaces": 50,
-        "occupied_spaces": 20,
-    }
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Smart Parking System API"}
