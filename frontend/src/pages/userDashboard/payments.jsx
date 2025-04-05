@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom"
 
-const Overview = () => {
+import { Link } from 'react-router-dom'
+import React from 'react'
+
+const payments = () => {
     return (
         <body class="bg-gray-100">
             <div class="flex h-screen">
@@ -27,11 +29,11 @@ const Overview = () => {
                             {/* <!-- Analytics Dropdown --> */}
                             <div class="space-y-1">
                                 <button class="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none" aria-expanded="true" aria-controls="analytics-dropdown">
-                                    <Link to="../admin-dashboard/activities" class="flex items-center">
+                                    <Link to="../user-dashboard/vehicles" class="flex items-center">
                                         <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                         </svg>
-                                        Parking Activities
+                                        Vehicles
                                     </Link>
                                 </button>
                             </div>
@@ -39,54 +41,32 @@ const Overview = () => {
                             {/* <!-- Team Dropdown --> */}
                             <div class="space-y-1">
                                 <button class="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none" aria-expanded="false" aria-controls="team-dropdown">
-                                    <Link to="../admin-dashboard/payments" class="flex items-center">
+                                    <Link to="../user-dashboard/history" class="flex items-center">
                                         <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                         </svg>
-                                        Payments
+                                        Parking History
                                     </Link>
                                 </button>
                             </div>
 
                             {/* <!-- Projects --> */}
-                            <Link to="../admin-dashboard/packages" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white group transition-all duration-200">
+                            <Link to="../user-dashboard/payments" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white group transition-all duration-200">
                                 <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                                 </svg>
-                                Packages
+                                Payments
                             </Link>
 
-                            {/* <!-- Calendar --> */}
-                            <Link to="users" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white group transition-all duration-200">
-                                <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                Users
-                            </Link>
 
                             {/* <!-- Documents --> */}
-                            <Link to="../admin-dashboard/reports" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white group transition-all duration-200">
+                            <Link to="../user-dashboard/reports" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white group transition-all duration-200">
                                 <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                                 Reports
                             </Link>
 
-                            {/* <!-- Calendar --> */}
-                            <Link to="../admin-dashboard/devices" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white group transition-all duration-200">
-                                <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                Devices & Slots
-                            </Link>
-
-                            {/* <!-- Calendar --> */}
-                            <Link to="../admin-dashboard/alerts" class="flex items-center px-4 py-2.5 mb-4 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white group transition-all duration-200">
-                                <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                Alerts
-                            </Link>
                         </div>
                     </nav>
 
@@ -113,7 +93,7 @@ const Overview = () => {
                 {/* Main Content */}
                 <main className="flex-1 p-6 bg-gray-100">
                     <div className="flex justify-between">
-                        <h1 className="text-2xl font-semibold text-gray-900">Welcome, Salman Faris!</h1>
+                        <h1 className="text-2xl font-semibold text-gray-900">Welcome, Payments</h1>
                         <button className="bg-red-700 text-white py-2 px-4 rounded-4xl hover:text-black hover:shadow-2xl">Logout</button>
                     </div>
                     <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -186,4 +166,4 @@ const Overview = () => {
     )
 }
 
-export default Overview
+export default payments

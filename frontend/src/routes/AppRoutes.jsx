@@ -20,7 +20,11 @@ import AdminDevices from "../pages/adminDasboard/devices";
 import AdminAlert from "../pages/adminDasboard/alerts";
 
 // User Dashboard
-import UserDashboard from "../pages/UserDashboard";
+import UserDashboard from "../pages/userDashboard/overview";
+import UserVehicles from "../pages/userDashboard/vehicles";
+import UserHistory from "../pages/userDashboard/history";
+import UserPayments from "../pages/userDashboard/payments";
+import UserReports from "../pages/userDashboard/reports";
 
 
 const AppRoutes = () => {
@@ -45,9 +49,12 @@ const AppRoutes = () => {
             <Route path="admin-dashboard/devices" element={<AdminDevices />} />
             <Route path="admin-dashboard/alerts" element={<AdminAlert />} />
 
-
-
+            {/* User Dashboard */}
             <Route path="/user-dashboard" element={<UserDashboard />} />
+            <Route path="/user-dashboard/vehicles" element={<UserVehicles />} />
+            <Route path="/user-dashboard/history" element={<UserHistory />} />
+            <Route path="/user-dashboard/payments" element={<UserPayments />} />
+            <Route path="/user-dashboard/reports" element={<UserReports />} />
         </Routes>
     );
 };
