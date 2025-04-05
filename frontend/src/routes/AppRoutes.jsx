@@ -18,6 +18,7 @@ import AdminUsers from "../pages/adminDasboard/users";
 import AdminReports from "../pages/adminDasboard/reports";
 import AdminDevices from "../pages/adminDasboard/devices";
 import AdminAlert from "../pages/adminDasboard/alerts";
+import AdminAdmins from "../pages/adminDasboard/admins"
 
 // User Dashboard
 import UserDashboard from "../pages/userDashboard/overview";
@@ -48,6 +49,7 @@ const AppRoutes = () => {
             <Route path="admin-dashboard/reports" element={<AdminReports />} />
             <Route path="admin-dashboard/devices" element={<AdminDevices />} />
             <Route path="admin-dashboard/alerts" element={<AdminAlert />} />
+            <Route path="admin-dashboard/admins" element={<AdminAdmins />} />
 
             {/* User Dashboard */}
             <Route path="/user-dashboard" element={<UserDashboard />} />

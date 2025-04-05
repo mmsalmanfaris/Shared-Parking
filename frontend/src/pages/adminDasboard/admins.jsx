@@ -1,10 +1,57 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import AdminTable from "@/components/admin/AdminTable"; // Updated basic table
+import AddUserModal from "@/components/admin/AddAdminModel";
+import { ImageOff } from "lucide-react";
 
-const Overview = () => {
+const Admins = () => {
+    const [users, setUsers] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingUser, setEditingUser] = useState(null);
+
+    // Simulate fetching users from the backend
+    useEffect(() => {
+        setUsers([
+            { id: 1, name: "John Doe", email: "john@example.com", address: "Colombo", nic: "2020125", gender: "male", time: "4/5/2025", role: "admin" },
+            { id: 2, name: "Jane Smith", email: "jane@example.com", address: "Galle", nic: "1992525268", gender: "female", time: "1/2/2025", role: "admin" },
+        ]);
+    }, []);
+
+    const handleAddUser = () => {
+        setEditingUser(null);
+        setIsModalOpen(true);
+    };
+
+    const handleEditUser = (user) => {
+        setEditingUser(user);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleSubmit = (formData) => {
+        if (editingUser) {
+            // Update existing user
+            setUsers((prev) =>
+                prev.map((user) => (user.id === editingUser.id ? { ...user, ...formData } : user))
+            );
+        } else {
+            // Add new user
+            setUsers((prev) => [...prev, { id: Date.now(), ...formData }]);
+        }
+    };
+
+    const handleDeleteUser = (id) => {
+        setUsers((prev) => prev.filter((user) => user.id !== id));
+    };
+
     return (
-        <body class="bg-gray-100">
-            <div class="flex h-screen">
-                {/* <!-- Sidebar --> */}
+
+        <main>
+            <div className="flex h-screen">
+                {/* Sidebar */}
                 <aside class="w-64 bg-gray-900 text-white">
                     <div class="p-4 border-b border-gray-800">
                         <div class="flex items-center justify-between">
@@ -17,7 +64,7 @@ const Overview = () => {
                         {/* <!-- Main Navigation --> */}
                         <div class="space-y-4">
                             {/* <!-- Dashboard --> */}
-                            <Link to="./" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg bg-gray-800 text-white group transition-all duration-200 hover:bg-gray-700">
+                            <Link to="../admin-dashboard" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg bg-gray-800 text-white group transition-all duration-200 hover:bg-gray-700">
                                 <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                 </svg>
@@ -102,91 +149,40 @@ const Overview = () => {
                     </div>
                 </aside>
 
-                {/* <!-- Main Content --> */}
-                {/* <main class="flex-1 p-6 bg-gray-100">
-                    <h1 class="text-2xl font-semibold text-gray-900">Dashboard Overview</h1>
-                    <div class="mt-4 p-6 bg-white rounded-lg shadow-md">
-                        <p class="text-gray-600">This is a dark sidebar example with submenus.</p>
-                    </div>
-                </main> */}
-
                 {/* Main Content */}
-                <main className="flex-1 p-6 bg-gray-100">
-                    <div className="flex justify-between">
-                        <h1 className="text-2xl font-semibold text-gray-900">Welcome, Salman Faris!</h1>
+                <main className="flex-1 bg-gray-100">
+                    <div className="flex justify-between pt-5 bg-gray-800 py-4 px-6">
+                        <h1 className="text-2xl font-semibold text-white">Welcome, Salman Faris!</h1>
                         <div className="">
                             <Link to="../admin-dashboard/admins" className="bg-blue-700 text-white py-2 px-4 rounded-md hover:text-black hover:shadow-2xl me-2">Admins</Link>
                             <button className="bg-red-700 text-white py-2 px-4 rounded-md hover:text-black hover:shadow-2xl">Logout</button>
                         </div>
                     </div>
-                    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {/* Profile Card */}
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h2 className="text-lg font-medium text-gray-800">Profile</h2>
-                            <p className="text-sm text-gray-600 mt-2">
-                                Full Name: Salman Faris <br />
-                                Email: salman@gmail.com <br />
-                                Contact: +94 761 754 242
-                            </p>
-                        </div>
+                    <div className="p-6">
 
-                        {/* Vehicles Card */}
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h2 className="text-lg font-medium text-gray-800">Vehicles</h2>
-                            <ul className="mt-2 space-y-2">
-                                <li className="text-sm text-gray-600">
-                                    BMW X5 (Red, Plate: ABC123)
-                                </li>
-                                <li className="text-sm text-gray-600">
-                                    Toyota Corolla (Blue, Plate: XYZ789)
-                                </li>
-                            </ul>
-                        </div>
+                        {/* Add User Button */}
+                        <div className="flex justify-end"><button
+                            onClick={handleAddUser}
+                            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 mb-4"
+                        >
+                            Add Admin
+                        </button></div>
 
-                        {/* Parking History Card */}
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h2 className="text-lg font-medium text-gray-800">Parking History</h2>
-                            <ul className="mt-2 space-y-2">
-                                <li className="text-sm text-gray-600">
-                                    2023-10-01 | Colombo Central | 2 hours
-                                </li>
-                                <li className="text-sm text-gray-600">
-                                    2023-09-28 | Kandy Mall | 1 hour
-                                </li>
-                            </ul>
-                        </div>
+                        {/* User Table */}
+                        <AdminTable users={users} />
 
-                        {/* Payments Card */}
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <h2 className="text-lg font-medium text-gray-800">Payments</h2>
-                            <ul className="mt-2 space-y-2">
-                                <li className="text-sm text-gray-600">
-                                    2023-10-01 | $10 | Paid
-                                </li>
-                                <li className="text-sm text-gray-600">
-                                    2023-09-28 | $5 | Paid
-                                </li>
-                            </ul>
-                        </div>
+                        {/* Add/Edit User Modal */}
+                        <AddUserModal
+                            isOpen={isModalOpen}
+                            onClose={handleCloseModal}
+                            onSubmit={handleSubmit}
+                            user={editingUser}
+                        />
                     </div>
                 </main>
             </div>
+        </main>
+    );
+};
 
-            {/* <script>
-                // Dropdown functionality
-                document.querySelectorAll('button[aria-controls]').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const isExpanded = button.getAttribute('aria-expanded') === 'true';
-                        const dropdownContent = document.getElementById(button.getAttribute('aria-controls'));
-
-                        button.setAttribute('aria-expanded', !isExpanded);
-                        dropdownContent.classList.toggle('hidden');
-                        button.querySelector('svg:last-child').classList.toggle('rotate-180');
-                    });
-                });
-            </script> */}
-        </body>
-    )
-}
-
-export default Overview
+export default Admins;
