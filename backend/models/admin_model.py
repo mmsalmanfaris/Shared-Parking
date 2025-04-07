@@ -7,7 +7,7 @@ class adminModel(BaseModel):
     nic: str
     gender: str
     email: str
-    password: str
+    password: Optional[str] = None
 
 class adminUpdate(adminModel):
     name: Optional[str] = None
@@ -21,4 +21,4 @@ class adminResponse(adminModel):
     id: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Use this instead of orm_mode

@@ -22,7 +22,7 @@ def create_admin(admin_data: adminModel):
         # Store admin details in Firestore
         admin_ref = _db.collection("Admin").document(admin.uid)
         admin_ref.set({
-            "fullname": admin_data.name,  # Access name as an attribute of the Pydantic model
+            "name": admin_data.name,  # Access name as an attribute of the Pydantic model
             "address": admin_data.address,
             "nic": admin_data.nic,
             "gender": admin_data.gender,
@@ -35,41 +35,127 @@ def create_admin(admin_data: adminModel):
         raise ValueError(f"Error during admin registration service: {str(e)}")
 
 
-def get_all_admins():
+from firebase_admin import auth
 
+def get_all_admins():
     try:
+        # Fetch all admin documents from Firestore
         admins_ref = _db.collection("Admin").stream()
-        admins = [doc.to_dict() for doc in admins_ref]
-        return admins
+        firestore_admins = {doc.id: doc.to_dict() for doc in admins_ref}  # Use UID as the key
+
+        # Fetch all users from Firebase Authentication
+        firebase_users = auth.list_users().users
+
+        # Combine Firestore and Firebase Authentication data
+        combined_admins = []
+        for user in firebase_users:
+            uid = user.uid
+            if uid in firestore_admins:  # Check if the UID exists in Firestore
+                firestore_data = firestore_admins[uid]
+                combined_admins.append({
+                    "id": uid,
+                    "name": firestore_data.get("name"),
+                    "email": user.email,  # Email from Firebase Auth
+                    "address": firestore_data.get("address"),
+                    "nic": firestore_data.get("nic"),
+                    "gender": firestore_data.get("gender"),
+                    "created_at": firestore_data.get("created_at")
+                })
+
+        return combined_admins
 
     except Exception as e:
         raise ValueError(f"Error fetching admins: {str(e)}")
 
 
-def get_admin_by_id(admin_id: str) -> Optional[adminResponse]:
+def get_admin_by_id(admin_id: str):
+    try:
+        # Fetch authentication details from Firebase
+        auth_details = auth.get_user(admin_id)
+        if not auth_details:
+            raise ValueError("Authentication details not found")
 
-    admin_ref = _db.collection("admins").document(admin_id).get()
-    if admin_ref.exists:
-        return adminResponse(**admin_ref.to_dict())  # Convert Firestore doc to Pydantic model
-    return None
+        # Fetch Firestore details
+        admin_ref = _db.collection("Admin").document(admin_id).get()
+        if not admin_ref.exists:
+            raise ValueError("Firestore details not found")
+
+        firestore_data = admin_ref.to_dict()
+
+        # Combine data (exclude password since it's not available)
+        combined_data = {
+            "id": admin_id,
+            "name": firestore_data.get("name"),
+            "address": firestore_data.get("address"),
+            "nic": firestore_data.get("nic"),
+            "gender": firestore_data.get("gender"),
+            "email": auth_details.email,  # Email comes from Firebase Auth
+        }
+
+        # Validate and return the combined data
+        return adminResponse(**combined_data)
+
+    except Exception as e:
+        print(f"Error fetching admin details: {e}")
+        return None
 
 
-def update_admin(admin_id: str, admin_data: adminUpdate) -> Optional[adminResponse]:
+def update_admin(admin_id: str, updated_data: adminUpdate):  # Ensure updated_data is a Pydantic model
+    try:
+        # Fetch the existing admin document from Firestore
+        admin_ref = _db.collection("Admin").document(admin_id)
+        admin_doc = admin_ref.get()
 
-    admin_ref = _db.collection("admins").document(admin_id)
-    if admin_ref.get().exists:
-        update_data = admin_data.dict(exclude_unset=True)  # Only include fields that are set
-        admin_ref.update(update_data)
-        updated_admin = admin_ref.get().to_dict()
-        updated_admin["id"] = admin_id
-        return adminResponse(**updated_admin)  # Convert Firestore doc to Pydantic model
-    return None
+        if not admin_doc.exists:
+            raise ValueError("Admin not found")
+
+        # Get the existing data from Firestore
+        existing_data = admin_doc.to_dict()
+
+        # Convert the Pydantic model to a dictionary with only provided fields
+        update_dict = updated_data.dict(exclude_unset=True)  # Only include fields explicitly provided in the request
+
+        # Update Firestore (exclude email and password)
+        firestore_update = {key: value for key, value in update_dict.items() if key not in ["email", "password"]}
+        updated_firestore_data = {**existing_data, **firestore_update}
+        admin_ref.set(updated_firestore_data)
+
+        # Update Firebase Authentication (if email or password is provided)
+        if "email" in update_dict or "password" in update_dict:
+            # Fetch the user from Firebase Authentication
+            user = auth.get_user(admin_id)
+
+            # Prepare the update arguments for Firebase Auth
+            update_args = {}
+            if "email" in update_dict:
+                update_args["email"] = update_dict["email"]
+            if "password" in update_dict:
+                update_args["password"] = update_dict["password"]
+
+            # Update the user in Firebase Authentication
+            auth.update_user(user.uid, **update_args)
+
+        return {"message": "Admin updated successfully"}
+
+    except Exception as e:
+        print(f"Error updating admin: {e}")
+        return {"error": "Failed to update admin"}
+
 
 
 def delete_admin(admin_id: str) -> bool:
 
-    admin_ref = _db.collection("admins").document(admin_id)
+    try:
+        auth.delete_user(admin_id)
+        print(f"Admin Deleted: {admin_id}")
+    except Exception as e:
+        print(f"Error delete admin: {e}")
+
+    admin_ref = _db.collection("Admin").document(admin_id)
     if admin_ref.get().exists:
         admin_ref.delete()
-        return True
+        return {"message": "Admin Deleted Successfully", "Admin_Id": admin_id}
     return False
+
+
+    
