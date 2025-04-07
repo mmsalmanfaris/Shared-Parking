@@ -293,7 +293,7 @@ const Home = () => {
                                 </path>
                             </svg>
                         </div>
-                        <p class="mt-4 font-dm-sans text-desktop-paragraph text-slate-body">Reviews are from paid customers and Product
+                        <p class="mt-4 font-dm-sans text-desktop-paragraph text-slate-body">Reviews are from paid users and Product
                             Hunt community</p>
                         <svg class="absolute top-24 -left-10 hidden h-36 fill-current text-slate-body sm:block md:-left-14 md:h-44"
                             viewBox="0 0 644 947" xmlns="http://www.w3.org/2000/svg">

@@ -89,7 +89,7 @@ const About = () => {
                                 </p>
                                 <p class="mt-4 max-w-2xl text-lg text-gray-500 lg:mx-auto">
                                     We know how to handle taxation for all the
-                                    countried we operate in. We care for our customers and help them manage cashflows.
+                                    countried we operate in. We care for our users and help them manage cashflows.
                                 </p>
                             </div>
 

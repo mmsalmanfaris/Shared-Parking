@@ -3,6 +3,16 @@ import { MdOutlineDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 
 const AdminTable = ({ users, onEdit, onDelete }) => {
+
+    const handleDeleteUser = async (id) => {
+        try {
+            await fetch(`/admins/${id}`, { method: "DELETE" });
+            setUsers((prev) => prev.filter((user) => user.id !== id)); // Remove admin from state
+        } catch (error) {
+            console.error("Failed to delete admin:", error);
+        }
+    };
+
     return (
         <div className="relative overflow-x-auto sm:rounded-lg">
             {/* Table */}
@@ -46,9 +56,9 @@ const AdminTable = ({ users, onEdit, onDelete }) => {
                                     <td className="px-6 py-4">{user.name}</td>
                                     <td className="px-6 py-4">{user.email}</td>
                                     <td className="px-6 py-4">{user.address}</td>
-                                    <td className="px-6 py-4">{user.email}</td>
-                                    <td className="px-6 py-4">{user.email}</td>
-                                    <td className="px-6 py-4">{user.email}</td>
+                                    <td className="px-6 py-4">{user.nic}</td>
+                                    <td className="px-6 py-4">{user.gender}</td>
+                                    <td className="px-6 py-4">{user.time}</td>
                                     <td className="px-6 py-4">{user.role}</td>
                                     <td className="px-6 py-4">
                                         <div className="flex">
