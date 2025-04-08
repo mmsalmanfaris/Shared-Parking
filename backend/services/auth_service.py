@@ -1,9 +1,13 @@
 from firebase_admin import auth
 from datetime import datetime, timedelta
-import jwt
-from fastapi import HTTPException
+from jose import jwt, JWTError
+from fastapi import HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 SECRET_KEY = "your-secret-key-here"
+ALGORITHM = "HS256"
+
+security = HTTPBearer()
 
 def authenticate_user(id_token: str):
     try:
@@ -27,3 +31,15 @@ def create_access_token(data: dict):
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm="HS256")
     return encoded_jwt
+
+
+
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload  # Return the decoded token payload (e.g., user ID, role)
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    except Exception:
+        raise HTTPException(status_code=401, detail="Could not validate credentials")

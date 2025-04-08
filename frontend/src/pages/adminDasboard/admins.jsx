@@ -7,6 +7,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TopBar from "@/components/admin/TopBar";
+import fetchWithToken from "../../Validation/fetchWithToken";
+
+
 
 const Admins = () => {
     const [users, setUsers] = useState([]);
@@ -18,7 +21,7 @@ const Admins = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://127.0.0.1:8000/api/admin/");
+                const response = await fetchWithToken("http://127.0.0.1:8000/api/admin/");
                 if (!response.ok) {
                     throw new Error("Failed to fetch admins");
                 }
