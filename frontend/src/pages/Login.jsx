@@ -29,6 +29,7 @@ const Login = () => {
             if (response.ok) {
                 localStorage.setItem("token", data.access_token); // Store the token
                 localStorage.setItem("user", JSON.stringify(data.user)); // Store user details (optional)
+
                 if (data.user["role"] === "admin") {
                     window.location.href = "/admin-dashboard";
                 } else if (data.user["role"] === "user") {
