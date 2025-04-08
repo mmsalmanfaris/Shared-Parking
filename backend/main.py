@@ -3,7 +3,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers import user_router
 from routers.auth_router import router as auth_router
 from routers.admin_router import router as admin_router
+from dotenv import load_dotenv
+from pydantic_settings import BaseSettings
+import os
 
+load_dotenv()
+
+class Settings(BaseSettings):
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
+
+settings = Settings()
 app = FastAPI()
 
 app.add_middleware(
@@ -20,6 +29,6 @@ app.include_router(admin_router, prefix="/api/admin", tags=["Admin"])
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Smart Parking System API"}
+    return {"message": "Welcome to the Smart Parking System API", "SECRET_KEY": settings.SECRET_KEY}
 
 

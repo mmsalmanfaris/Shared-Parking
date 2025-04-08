@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import loginImage from "../assets/images/login/login.webp";
+import { auth, signInWithEmailAndPassword } from "../../firebase";
 
 const Login = () => {
     const [email, setEmail] = useState("")
@@ -12,20 +13,25 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            // Send login request to FastAPI backend
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Send the user's ID token to the backend for verification
+            const idToken = await user.getIdToken();
             const response = await fetch("http://127.0.0.1:8000/api/auth/login/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ idToken }),
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                localStorage.setItem("token", data.token)
-                if (data.role === "admin") {
+                localStorage.setItem("token", data.access_token); // Store the token
+                localStorage.setItem("user", JSON.stringify(data.user)); // Store user details (optional)
+                if (data.user["role"] === "admin") {
                     window.location.href = "/admin-dashboard";
-                } else if (data.role === "user") {
+                } else if (data.user["role"] === "user") {
                     window.location.href = "/user-dashboard";
                 }
             } else {
@@ -35,6 +41,7 @@ const Login = () => {
             setError("An error occurred. Please try again.");
         }
     };
+
 
     return (
         <>

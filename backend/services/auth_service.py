@@ -1,31 +1,29 @@
-import jwt
-from datetime import datetime, timedelta
 from firebase_admin import auth
+from datetime import datetime, timedelta
+import jwt
 from fastapi import HTTPException
 
-SECRET_KEY = "your-secret-eky"
+SECRET_KEY = "your-secret-key-here"
 
-def authenticate_user(email: str, password: str):
+def authenticate_user(id_token: str):
     try:
-        user = auth.get_user_by_email(email)
+        # Verify the Firebase ID token
+        decoded_token = auth.verify_id_token(id_token)
+        user_uid = decoded_token["uid"]
 
-        custom_claims = auth.get_user(user.uid).custom_claims
+        # Fetch user details
+        user_record = auth.get_user(user_uid)
+        custom_claims = user_record.custom_claims
         role = custom_claims.get("role", "user")
 
-        # JWT Token
-        token = jwt.encode(
-            {
-                "sub": user.uid,
-                "email": user.email,
-                "role": role,
-                "exp": datetime.utc.now() + timedelta(hour=1)
-            },
-            SECRET_KEY,
-            algorithm="HS256",
-        )
+        return {"email": user_record.email, "role": role}
 
-        #password not checked
-
-        return {"message": "Login successful", "token": token, "role": role}
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(hours=1)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm="HS256")
+    return encoded_jwt
