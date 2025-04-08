@@ -22,7 +22,7 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // Redirect based on user role
+                localStorage.setItem("token", data.token)
                 if (data.role === "admin") {
                     window.location.href = "/admin-dashboard";
                 } else if (data.role === "user") {

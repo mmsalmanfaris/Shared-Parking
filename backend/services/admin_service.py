@@ -35,7 +35,7 @@ def create_admin(admin_data: adminModel):
         raise ValueError(f"Error during admin registration service: {str(e)}")
 
 
-from firebase_admin import auth
+
 
 def get_all_admins():
     try:
