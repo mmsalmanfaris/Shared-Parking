@@ -1,7 +1,6 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
 
-
 // Admin Dashboard
 import AdminDashboard from "../pages/adminDasboard/overview";
 import AdminActivites from "../pages/adminDasboard/activites";

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import AdminTable from "@/components/admin/AdminTable"; // Updated basic table
 import AddUserModal from "@/components/admin/AddAdminModel";
@@ -112,20 +111,18 @@ const Admins = () => {
 
         <main>
             <div className="flex h-screen">
-                {/* Sidebar */}
+
                 <aside class="w-64 bg-gray-900 text-white">
                     <SideBar />
                 </aside>
 
-                {/* Main Content */}
                 <main className="flex-1 bg-gray-100">
-
 
                     <TopBar />
 
                     <div className="p-6">
 
-                        {/* Add User Button */}
+
                         <div className="flex justify-end"><button
                             onClick={handleAddUser}
                             className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 mb-4"
@@ -133,14 +130,14 @@ const Admins = () => {
                             Add Admin
                         </button></div>
 
-                        {/* User Table */}
+
                         <AdminTable
                             users={users}
                             onEdit={handleEditUser}
                             onDelete={handleDeleteConfirmation}
                         />
 
-                        {/* Add/Edit User Modal */}
+
                         <AddUserModal
                             isOpen={isModalOpen}
                             onClose={handleCloseModal}
@@ -149,7 +146,7 @@ const Admins = () => {
                         />
                     </div>
 
-                    {/* Confirmation Modal */}
+
                     <div
                         id="popup-modal"
                         className="hidden overflow-y-auto overflow-x-hidden fixed flex z-50 justify-center items-center w-full h-full bg-black/60  md:inset-0 h-[calc(100%-1rem)] "

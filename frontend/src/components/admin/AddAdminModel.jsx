@@ -1,57 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 
 const AddUserModal = ({ isOpen, onClose, onSubmit, user }) => {
 
+    console.log(user);
     const [formData, setFormData] = useState({
-        name: user?.name || "",
-        address: user?.address || "",
-        nic: user?.nic || "",
-        gender: user?.gender || "",
-        email: user?.email || "",
-        password: user?.password || "",
+        name: "",
+        address: "",
+        nic: "",
+        gender: "",
+        email: "",
+        password: "",
     });
 
-    const [loading, setLoading] = useState(false);
+    // Update formData when the user prop changes
+    useEffect(() => {
+        if (user) {
+            setFormData({
+                name: user.name || "",
+                address: user.address || "",
+                nic: user.nic || "",
+                gender: user.gender || "",
+                email: user.email || "",
+                password: user.password || "",
+            });
+        } else {
+            // Reset form data if no user is provided (e.g., for adding a new admin)
+            setFormData({
+                name: "",
+                address: "",
+                nic: "",
+                gender: "",
+                email: "",
+                password: "",
+            });
+        }
+    }, [user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        try {
+        if (user) {
+            onSubmit(formData);
+        } else {
+            try {
 
-            const response = await fetch("http://127.0.0.1:8000/api/admin/register/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-
-
-
-            if (response.ok) {
-                // Show success message
-                toast.success("Admin created successfully!", {
-                    position: "top-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
+                const response = await fetch("http://127.0.0.1:8000/api/admin/register/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
                 });
-                onClose();
-                setTimeout(() => {
-                    window.location.reload();
-                }, 4000);
-            } else {
-                // Show error message
-                toast.error(data.detail || "Admin creation failed.", {
+
+                const data = await response.json();
+
+
+
+                if (response.ok) {
+                    // Show success message
+                    toast.success("Admin created successfully!", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                    });
+                    onClose();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 4000);
+                } else {
+                    // Show error message
+                    toast.error(data.detail || "Admin creation failed.", {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                    });
+                }
+            } catch (err) {
+                // Show generic error message
+                toast.warn("An error occurred. Please try again.", {
                     position: "top-right",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -59,18 +95,9 @@ const AddUserModal = ({ isOpen, onClose, onSubmit, user }) => {
                     pauseOnHover: true,
                 });
             }
-        } catch (err) {
-            // Show generic error message
-            toast.warn("An error occurred. Please try again.", {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-            });
-        }
-        finally {
-            setLoading(false);
+            finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -242,7 +269,7 @@ const AddUserModal = ({ isOpen, onClose, onSubmit, user }) => {
                                             ></path>
                                         </svg>
                                     )}
-                                    {loading ? "Processing..." : "Save"}
+                                    {loading ? "Processing..." : user ? "Save Chaneges" : "Add Admin"}
                                 </button>
                             </form>
                         </div>

@@ -21,7 +21,6 @@ const AppRoutes = () => {
             <Route path="/packages" element={<Packages />} />
             <Route path="/forget-password" element={<Forget />} Route />
             <Route path="/passwod-reset" element={<Reset />} Route />
-
         </Routes>
     );
 };
