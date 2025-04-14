@@ -9,13 +9,13 @@ class adminModel(BaseModel):
     email: str
     password: Optional[str] = None
 
-class adminUpdate(adminModel):
-    name: Optional[str] = None
-    address: Optional[str] = None
-    nic: Optional[str] = None
-    gender: Optional[str] = None
-    email: Optional[str] = None
-    password: Optional[str] = None
+class adminUpdate(BaseModel):
+    name: Optional[str]
+    address: Optional[str]
+    nic: Optional[str]
+    gender: Optional[str]
+    email: Optional[str]
+    password: Optional[str]
 
 class adminResponse(adminModel):
     id: str
