@@ -100,42 +100,32 @@ def get_admin_by_id(admin_id: str):
         return None
 
 
-def update_admin(admin_id: str, updated_data: adminUpdate):  # Ensure updated_data is a Pydantic model
+def update_admin(admin_id: str, updated_data: dict):
+    print(admin_id)
     try:
-        # Fetch the existing admin document from Firestore
         admin_ref = _db.collection("Admin").document(admin_id)
         admin_doc = admin_ref.get()
 
         if not admin_doc.exists:
-            raise ValueError("Admin not found")
+            return False
 
-        # Get the existing data from Firestore
         existing_data = admin_doc.to_dict()
 
-        # Convert the Pydantic model to a dictionary with only provided fields
-        update_dict = updated_data.dict(exclude_unset=True)  # Only include fields explicitly provided in the request
-
-        # Update Firestore (exclude email and password)
-        firestore_update = {key: value for key, value in update_dict.items() if key not in ["email", "password"]}
+        # Exclude email and password for Firestore update
+        firestore_update = {key: value for key, value in updated_data.items() if key not in ["email", "password"]}
         updated_firestore_data = {**existing_data, **firestore_update}
         admin_ref.set(updated_firestore_data)
 
-        # Update Firebase Authentication (if email or password is provided)
-        if "email" in update_dict or "password" in update_dict:
-            # Fetch the user from Firebase Authentication
+        if "email" in updated_data or "password" in updated_data:
             user = auth.get_user(admin_id)
-
-            # Prepare the update arguments for Firebase Auth
             update_args = {}
-            if "email" in update_dict:
-                update_args["email"] = update_dict["email"]
-            if "password" in update_dict:
-                update_args["password"] = update_dict["password"]
-
-            # Update the user in Firebase Authentication
+            if "email" in updated_data:
+                update_args["email"] = updated_data["email"]
+            if "password" in updated_data:
+                update_args["password"] = updated_data["password"]
             auth.update_user(user.uid, **update_args)
 
-        return {"message": "Admin updated successfully"}
+        return True
 
     except Exception as e:
         print(f"Error updating admin: {e}")

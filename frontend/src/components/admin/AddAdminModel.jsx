@@ -1,7 +1,8 @@
+import fetchWithToken from "@/Validation/fetchWithToken";
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 
-const AddUserModal = ({ isOpen, onClose, onSubmit, user }) => {
+const AddAdminModal = ({ isOpen, onClose, onSubmit, user }) => {
 
     console.log(user);
     const [formData, setFormData] = useState({
@@ -47,57 +48,39 @@ const AddUserModal = ({ isOpen, onClose, onSubmit, user }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        if (user) {
-            onSubmit(formData);
-        } else {
-            try {
 
-                const response = await fetch("http://127.0.0.1:8000/api/admin/register/", {
+        try {
+            let response;
+
+            if (user) {
+                // Update existing admin
+                response = await fetchWithToken(`http://127.0.0.1:8000/api/admin/${user.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                });
+            } else {
+                // Add new admin
+                response = await fetchWithToken("http://127.0.0.1:8000/api/admin/register/", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(formData),
                 });
-
-                const data = await response.json();
-
-
-
-                if (response.ok) {
-                    // Show success message
-                    toast.success("Admin created successfully!", {
-                        position: "top-right",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                    });
-                    onClose();
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 4000);
-                } else {
-                    // Show error message
-                    toast.error(data.detail || "Admin creation failed.", {
-                        position: "top-right",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                    });
-                }
-            } catch (err) {
-                // Show generic error message
-                toast.warn("An error occurred. Please try again.", {
-                    position: "top-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                });
             }
-            finally {
-                setLoading(false);
+
+            const data = await response.json();
+
+            if (response.ok) {
+                toast.success(user ? "Admin updated successfully!" : "Admin created successfully!");
+                onClose(); // Close the modal
+                onSubmit({ id: user?.id || data.Admin_Id, ...formData }); // ✅ call parent handle
+            } else {
+                toast.error(data.detail || "Operation failed.");
             }
+        } catch (err) {
+            toast.warn("An error occurred. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -280,4 +263,4 @@ const AddUserModal = ({ isOpen, onClose, onSubmit, user }) => {
     );
 };
 
-export default AddUserModal;
+export default AddAdminModal;

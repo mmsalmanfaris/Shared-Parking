@@ -57,15 +57,16 @@ const Admins = () => {
 
     const handleSubmit = (formData) => {
         if (editingUser) {
-            // Update existing user
+            // Update existing user in the local state
             setUsers((prev) =>
                 prev.map((user) => (user.id === editingUser.id ? { ...user, ...formData } : user))
             );
         } else {
-            // Add new user
+            // Add new user to the local state
             setUsers((prev) => [...prev, { id: Date.now(), ...formData }]);
         }
     };
+
 
     const handleDeleteUser = async () => {
         try {

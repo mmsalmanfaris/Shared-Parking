@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 // Admin Dashboard
 import AdminDashboard from "../pages/adminDasboard/overview";
@@ -24,8 +24,7 @@ import ProtectedAdminRoute from '../Validation/protectedAdminRoute';
 const ProtectedRoutes = () => {
 
     return (
-
-        <Routes>
+        <>
             {/* Admin Dashboard */}
             <Route path="/admin-dashboard" element={
                 <ProtectedAdminRoute requiredRole="admin">
@@ -34,42 +33,42 @@ const ProtectedRoutes = () => {
             }
             />
             <Route path="admin-dashboard/activities" element={
-                <ProtectedAdminRoute>
+                <ProtectedAdminRoute requiredRole="admin">
                     <AdminActivites />
                 </ProtectedAdminRoute>
             } />
             <Route path="admin-dashboard/payments" element={
-                <ProtectedAdminRoute>
+                <ProtectedAdminRoute requiredRole="admin">
                     <AdminPayments />
                 </ProtectedAdminRoute>
             } />
             <Route path="admin-dashboard/packages" element={
-                <ProtectedAdminRoute>
+                <ProtectedAdminRoute requiredRole="admin">
                     <AdminPackages />
                 </ProtectedAdminRoute>
             } />
             <Route path="admin-dashboard/users" element={
-                <ProtectedAdminRoute>
+                <ProtectedAdminRoute requiredRole="admin">
                     <AdminUsers />
                 </ProtectedAdminRoute>
             } />
             <Route path="admin-dashboard/reports" element={
-                <ProtectedAdminRoute>
+                <ProtectedAdminRoute requiredRole="admin">
                     <AdminReports />
                 </ProtectedAdminRoute>
             } />
             <Route path="admin-dashboard/devices" element={
-                <ProtectedAdminRoute>
+                <ProtectedAdminRoute requiredRole="admin">
                     <AdminDevices />
                 </ProtectedAdminRoute>
             } />
             <Route path="admin-dashboard/alerts" element={
-                <ProtectedAdminRoute>
+                <ProtectedAdminRoute requiredRole="admin">
                     <AdminAlert />
                 </ProtectedAdminRoute>
             } />
             <Route path="admin-dashboard/admins" element={
-                <ProtectedAdminRoute>
+                <ProtectedAdminRoute requiredRole="admin">
                     <AdminAdmins />
                 </ProtectedAdminRoute>
             } />
@@ -80,7 +79,7 @@ const ProtectedRoutes = () => {
             <Route path="/user-dashboard/history" element={<UserHistory />} />
             <Route path="/user-dashboard/payments" element={<UserPayments />} />
             <Route path="/user-dashboard/reports" element={<UserReports />} />
-        </Routes>
+        </>
     )
 }
 

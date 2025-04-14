@@ -52,7 +52,7 @@ def update_existing_admin(admin_id: str, admin_data: adminUpdate):
     updated_admin = update_admin(admin_id, admin_data.dict(exclude_unset=True))
     if not updated_admin:
         raise HTTPException(status_code=404, detail="Admin not found")
-    return updated_admin
+    return {"message": "Admin updated successfully"}
 
 @router.delete("/{admin_id}")
 def delete_existing_admin(admin_id: str):
