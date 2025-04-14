@@ -1,5 +1,7 @@
 import React from 'react'
 import { Route } from "react-router-dom";
+import ProtectedAdminRoute from '../Validation/protectedAdminRoute';
+import ProtectedUserRoute from '@/Validation/protectedUserRoute';
 
 // Admin Dashboard
 import AdminDashboard from "../pages/adminDasboard/overview";
@@ -18,7 +20,6 @@ import UserVehicles from "../pages/userDashboard/vehicles";
 import UserHistory from "../pages/userDashboard/history";
 import UserPayments from "../pages/userDashboard/payments";
 import UserReports from "../pages/userDashboard/reports";
-import ProtectedAdminRoute from '../Validation/protectedAdminRoute';
 
 
 const ProtectedRoutes = () => {
@@ -73,12 +74,34 @@ const ProtectedRoutes = () => {
                 </ProtectedAdminRoute>
             } />
 
+
             {/* User Dashboard */}
-            <Route path="/user-dashboard" element={<UserDashboard />} />
-            <Route path="/user-dashboard/vehicles" element={<UserVehicles />} />
-            <Route path="/user-dashboard/history" element={<UserHistory />} />
-            <Route path="/user-dashboard/payments" element={<UserPayments />} />
-            <Route path="/user-dashboard/reports" element={<UserReports />} />
+            <Route path="/user-dashboard" element={
+                <ProtectedUserRoute requiredRole="user">
+                    <UserDashboard />
+                </ProtectedUserRoute>
+            } />
+            <Route path="/user-dashboard/vehicles" element={
+                <ProtectedUserRoute requiredRole="user">
+                    <UserVehicles />
+                </ProtectedUserRoute>
+            } />
+            <Route path="/user-dashboard/history" element={
+                <ProtectedUserRoute requiredRole="user">
+                    <UserHistory />
+                </ProtectedUserRoute>
+            } />
+            <Route path="/user-dashboard/payments" element={
+                <ProtectedUserRoute requiredRole="user">
+                    <UserPayments />
+                </ProtectedUserRoute>
+            } />
+            <Route path="/user-dashboard/reports" element={
+                <ProtectedUserRoute requiredRole="user">
+                    <UserReports />
+                </ProtectedUserRoute>
+            } />
+
         </>
     )
 }
