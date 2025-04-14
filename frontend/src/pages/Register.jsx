@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import registerImage from "../assets/images/register/register.jpg";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Register = () => {
     // Initialize form data with empty strings
@@ -46,13 +49,38 @@ const Register = () => {
             const data = await response.json();
 
             if (response.ok) {
-                alert("Registration successful!");
-                window.location.href = "/login"; // Redirect to login page
+
+                // Show error message
+                toast.success("Registration Success", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                });
+
+                setTimeout(() => {
+                    window.location.href = "/login"; // Redirect to login page
+                }, 1200)
             } else {
-                setError(data.detail || "Registration failed. Please check your details and try again.");
+                // Show error message
+                toast.warning("Registration Failed. Try again!", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                });
             }
         } catch (err) {
-            setError("An unexpected error occurred. Please try again later.");
+            // Show error message
+            toast.error("Check Your Internet & Try agin!", {
+                position: "top-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         } finally {
             setLoading(false); // Stop loading
         }
@@ -270,9 +298,6 @@ const Register = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Display Error Message */}
-            {error && <p className="text-red-500 text-center">{error}</p>}
 
             <Footer />
         </>

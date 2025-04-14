@@ -3,6 +3,9 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import loginImage from "../assets/images/login/login.webp";
 import { auth, signInWithEmailAndPassword } from "../../firebase";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Login = () => {
     const [email, setEmail] = useState("")
@@ -29,19 +32,48 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
+
+                // Show error message
+                toast.success("Login Success", {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                });
+
                 localStorage.setItem("token", data.access_token); // Store the token
                 localStorage.setItem("user", JSON.stringify(data.user));
 
-                if (data.user["role"] === "admin") {
-                    window.location.href = "/admin-dashboard";
-                } else if (data.user["role"] === "user") {
-                    window.location.href = "/user-dashboard";
-                }
+                setTimeout(() => {
+                    if (data.user["role"] === "admin") {
+                        window.location.href = "/admin-dashboard";
+                    } else if (data.user["role"] === "user") {
+                        window.location.href = "/user-dashboard";
+                    }
+                }, 1200);
+
             } else {
                 setError(data.detail || "Login failed");
+
+                // Show error message
+                toast.warning("Invalid Credential", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                });
             }
         } catch (err) {
-            setError("An error occurred. Please try again.");
+            // Show error message
+            toast.error("Check your internet & try again.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
         }
         finally {
             setLoading(false);
@@ -151,9 +183,6 @@ const Login = () => {
                     </div>
                 </form>
             </div>
-
-            {error && <p className="text-red-500 text-center">{error}</p>}
-
             <Footer />
         </>
     );
