@@ -147,7 +147,7 @@ const Admins = () => {
                         />
                     </div>
 
-
+                    {/* Delete Modal */}
                     <div
                         id="popup-modal"
                         className="hidden overflow-y-auto overflow-x-hidden fixed flex z-50 justify-center items-center w-full h-full bg-black/60  md:inset-0 h-[calc(100%-1rem)] "
