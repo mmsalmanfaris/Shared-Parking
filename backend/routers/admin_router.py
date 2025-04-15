@@ -29,6 +29,7 @@ def get_all_admins_list():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch admins: {str(e)}")
 
+
 @router.get("/{admin_id}")
 def get_single_admin(admin_id: str):
     """

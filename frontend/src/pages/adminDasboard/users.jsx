@@ -2,28 +2,64 @@ import AddUserModel from "@/components/admin/AddUserModel"
 import SideBar from "@/components/admin/SideBar"
 import TopBar from "@/components/admin/TopBar"
 import UserTable from "@/components/admin/UserTable"
-import { useState } from "react"
+import fetchWithToken from "@/Validation/fetchWithToken"
+import { useEffect, useState } from "react"
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Users = () => {
-    const [user, setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
     const [userToDelete, setUserToDelete] = useState(null);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetchWithToken("http://127.0.0.1:8000/api/user/")
+                if (!response) {
+                    throw new Error("Failed to fetch Users");
+                }
+                const data = await response.json()
+                setUsers(data);
+            } catch (error) {
+                console.error("Error fetching users:", error.message);
+            }
+        };
+        fetchUsers();
+    }, [])
 
     const handleAddUser = () => {
         setEditingUser(null);
         setIsModalOpen(true);
     };
 
-    const handleEdit = (user) => {
+    const handleEditUser = (user) => {
         setEditingUser(user);
         setIsModalOpen(true);
     };
 
     const handleDeleteConfirmation = (id) => {
         setUserToDelete(id);
-        const modal = document.getElementById("pop-modal");
+        const modal = document.getElementById("popup-modal");
         modal.classList.remove("hidden");
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleSubmit = (formData) => {
+        if (editingUser) {
+            // Update existing user in the local state
+            setUsers((prev) =>
+                prev.map((user) => (user.id === editingUser.id ? { ...user, ...formData } : user))
+            );
+        } else {
+            // Add new user to the local state
+            setUsers((prev) => [...prev, { id: Date.now(), ...formData }]);
+        }
     };
 
     const handleDeleteUser = async () => {
@@ -50,13 +86,13 @@ const Users = () => {
             modal.classList.add("hidden");
 
             // Clear the adminToDelete state
-            setAdminToDelete(null);
+            setUserToDelete(null);
 
         } catch (error) {
             console.error("Error deleting admin:", error.response?.data || error.message);
 
             // Show error message
-            toast.error(error.response?.data?.detail || "An error occurred while deleting the admin.", {
+            toast.error(error.response?.data?.detail || "An error occurred while deleting the user.", {
                 position: "top-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -65,7 +101,6 @@ const Users = () => {
             });
         }
     };
-
 
 
 
@@ -89,12 +124,17 @@ const Users = () => {
                     </div>
 
                     <UserTable
-                        users={user}
-                        onEdit={handleEdit}
+                        users={users}
+                        onEdit={handleEditUser}
                         onDelete={handleDeleteConfirmation}
                     />
 
-                    <AddUserModel />
+                    <AddUserModel
+                        isOpen={isModalOpen}
+                        onClose={handleCloseModal}
+                        onSubmit={handleSubmit}
+                        user={editingUser}
+                    />
 
                 </div>
 
