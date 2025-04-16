@@ -1,15 +1,24 @@
 from fastapi import APIRouter, HTTPException
-from models.user_model  import userModel, userUpdate
-from services.user_service import create_user, get_all_users, get_user_by_id, update_user, delete_user
+from models.user_model  import userModel, user_Model, userUpdate, user_Update
+from services.user_service import register_user, create_user, get_all_users, get_user_by_id, update_user, delete_user
 
 router = APIRouter()
 
+# User registration Form
 @router.post("/register/")
-def register_user(user_data: userModel):
+def user_registration(user_data: userModel):
+    try:
+        return register_user(user_data)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error during registration router: {str(e)}")
+    
+# Admin Dadshboard User Page
+@router.post("/create")
+def user_creation(user_data: user_Model):
     try:
         return create_user(user_data)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Error during registration router: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Error during user creation: {str(e)}")
     
 @router.get("/")
 def get_all_user_list():
@@ -29,7 +38,7 @@ def get_single_admin(user_id: str):
     return user
 
 @router.put("/{user_id}")
-def update_existing_admin(user_id: str, user_data: userUpdate):
+def update_existing_admin(user_id: str, user_data: user_Update):
 
     updated_user = update_user(user_id, user_data.dict(exclude_unset=True))
     if not updated_user:

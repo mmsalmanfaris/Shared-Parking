@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers import user_router
 from routers.auth_router import router as auth_router
 from routers.admin_router import router as admin_router
+from routers import vehicle_router
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 import os
@@ -26,6 +27,7 @@ app.add_middleware(
 app.include_router(user_router.router, prefix="/api/user", tags=["users"])
 app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(admin_router, prefix="/api/admin", tags=["Admin"])
+app.include_router(vehicle_router.router, prefix="/api/vehicle", tags=["Vehicle"])
 
 @app.get("/")
 def read_root():

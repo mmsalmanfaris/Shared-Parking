@@ -2,6 +2,50 @@ from firebase_admin import firestore, auth
 from config.firebase_config import _db
 from models.user_model import userModel, userResponse
 
+
+# Registration form
+def register_user(user_data: userModel):
+    try:
+        # Create a new user in Firebase Authentication
+        user = auth.create_user(
+            email=user_data.email,
+            password=user_data.password
+        )
+
+        #custome claims
+        auth.set_custom_user_claims(user.uid, {
+            "role": "user"
+        })
+
+        print(user.uid)
+        
+        # Store user details in Firestore
+        user_ref = _db.collection("User").document(user.uid)
+        user_ref.set({
+            "name": user_data.name,
+            "nic": user_data.nic,
+            "address": user_data.address,
+            "contact": user_data.contact,
+            "created_at": firestore.SERVER_TIMESTAMP
+        })
+
+        # Store vehicle details in Firestore with a reference to the user ID
+        vehicle_ref = _db.collection("Vehicle")  # Fixed typo: "Vechicle" -> "Vehicle"
+        vehicle_ref.add({
+            "user_id": user.uid,  # Reference to the user's UID
+            "brand": user_data.vehicle_brand,
+            "model": user_data.vehicle_model,
+            "color": user_data.car_color,
+            "plate_number": user_data.plate_number,
+            "created_at": firestore.SERVER_TIMESTAMP
+        })
+
+        return {"message": "User created successfully", "user_id": user.uid}  # Return user.uid
+
+    except Exception as e:
+        raise ValueError(f"Error during registration service: {str(e)}")
+
+# Admin Dashboard User Page
 def create_user(user_data: userModel):
     try:
         # Create a new user in Firebase Authentication
@@ -18,7 +62,7 @@ def create_user(user_data: userModel):
         print(user.uid)
         
         # Store user details in Firestore
-        user_ref = _db.collection("user").document(user.uid)
+        user_ref = _db.collection("User").document(user.uid)
         user_ref.set({
             "name": user_data.name,
             "nic": user_data.nic,
@@ -27,26 +71,16 @@ def create_user(user_data: userModel):
             "created_at": firestore.SERVER_TIMESTAMP
         })
 
-        # # Store vehicle details in Firestore with a reference to the user ID
-        # vehicle_ref = _db.collection("Vehicle")  # Fixed typo: "Vechicle" -> "Vehicle"
-        # vehicle_ref.add({
-        #     "user_id": user.uid,  # Reference to the user's UID
-        #     "brand": user_data.vehicle_brand,
-        #     "model": user_data.vehicle_model,
-        #     "color": user_data.car_color,
-        #     "plate_number": user_data.plate_number,
-        #     "created_at": firestore.SERVER_TIMESTAMP
-        # })
-
         return {"message": "User created successfully", "user_id": user.uid}  # Return user.uid
 
     except Exception as e:
         raise ValueError(f"Error during registration service: {str(e)}")
-    
+ 
+
 
 def get_all_users():
     try:
-        users_ref = _db.collection("user").stream()
+        users_ref = _db.collection("User").stream()
         firestore_users = {doc.id: doc.to_dict() for doc in users_ref}
 
         firebase_users = auth.list_users().users
@@ -94,7 +128,7 @@ def get_user_by_id(user_id: str):
             raise ValueError("Authentication details not found")
 
         # Fetch Firestore details
-        admin_ref = _db.collection("user").document(user_id).get()
+        admin_ref = _db.collection("User").document(user_id).get()
         if not admin_ref.exists:
             raise ValueError("Firestore details not found")
 
@@ -120,7 +154,7 @@ def get_user_by_id(user_id: str):
 
 def update_user(user_id: str, updated_data: dict):
     try:
-        user_ref = _db.collection("user").document(user_id)
+        user_ref = _db.collection("User").document(user_id)
         user_doc = user_ref.get()
 
         if not user_doc.exists:

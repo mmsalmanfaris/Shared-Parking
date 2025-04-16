@@ -9,6 +9,7 @@ import AdminActivites from "../pages/adminDasboard/activites";
 import AdminPayments from "../pages/adminDasboard/payments";
 import AdminPackages from "../pages/adminDasboard/packages";
 import AdminUsers from "../pages/adminDasboard/users";
+import AdminVehicles from "../pages/adminDasboard/vehicles";
 import AdminReports from "../pages/adminDasboard/reports";
 import AdminDevices from "../pages/adminDasboard/devices";
 import AdminAlert from "../pages/adminDasboard/alerts";
@@ -51,6 +52,11 @@ const ProtectedRoutes = () => {
             <Route path="admin-dashboard/users" element={
                 <ProtectedAdminRoute requiredRole="admin">
                     <AdminUsers />
+                </ProtectedAdminRoute>
+            } />
+            <Route path="admin-dashboard/vehicles" element={
+                <ProtectedAdminRoute requiredRole="admin">
+                    <AdminVehicles />
                 </ProtectedAdminRoute>
             } />
             <Route path="admin-dashboard/reports" element={

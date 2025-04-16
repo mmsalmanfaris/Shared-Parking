@@ -75,7 +75,7 @@ const AddUserModal = ({ isOpen, onClose, onSubmit, user }) => {
                 });
             } else {
                 // Add new admin
-                response = await fetchWithToken("http://127.0.0.1:8000/api/user/register/", {
+                response = await fetchWithToken("http://127.0.0.1:8000/api/user/create/", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(formData),
