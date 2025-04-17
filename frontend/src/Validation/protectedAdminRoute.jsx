@@ -5,10 +5,14 @@ const ProtectedAdminRoute = ({ children, requiredRole }) => {
 
     const token = localStorage.getItem("token");
 
-    const decode = jwtDecode(token);
-
-
     if (!token) {
+        return <Navigate to="../login" />;
+    }
+
+    let decode;
+    try {
+        decode = jwtDecode(token);
+    } catch (error) {
         return <Navigate to="../login" />;
     }
 
