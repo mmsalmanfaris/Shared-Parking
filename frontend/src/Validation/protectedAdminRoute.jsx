@@ -1,19 +1,23 @@
+import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 
 const ProtectedAdminRoute = ({ children, requiredRole }) => {
 
     const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user"));
+
+    const decode = jwtDecode(token);
+
+
     if (!token) {
         return <Navigate to="../login" />;
     }
 
     // Check if the user is authenticated and has the required role
-    if (!user) {
+    if (!decode.role) {
         return <Navigate to="../login" />;
     }
 
-    if (requiredRole && user.role !== requiredRole) {
+    if (requiredRole && decode.role !== requiredRole) {
         return <Navigate to="../login" />;
     }
 

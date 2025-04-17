@@ -1,4 +1,3 @@
-import { AlertCircle } from "lucide-react";
 
 const fetchWithToken = async (url, options = {}) => {
     const token = localStorage.getItem("token");

@@ -5,6 +5,7 @@ import loginImage from "../assets/images/login/login.webp";
 import { auth, signInWithEmailAndPassword } from "../../firebase";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { jwtDecode } from "jwt-decode";
 
 
 const Login = () => {
@@ -31,6 +32,7 @@ const Login = () => {
 
             const data = await response.json();
 
+
             if (response.ok) {
 
                 // Show error message
@@ -42,13 +44,16 @@ const Login = () => {
                     pauseOnHover: true,
                 });
 
-                localStorage.setItem("token", data.access_token); // Store the token
-                localStorage.setItem("user", JSON.stringify(data.user));
+                // Json Webtoken for security
+                localStorage.setItem("token", data.access_token);
+                const token = localStorage.getItem("token");
+                const decoded = jwtDecode(token)
+
 
                 setTimeout(() => {
-                    if (data.user["role"] === "admin") {
+                    if (decoded.role === "admin") {
                         window.location.href = "/admin-dashboard";
-                    } else if (data.user["role"] === "user") {
+                    } else if (decoded.role === "user") {
                         window.location.href = "/user-dashboard";
                     }
                 }, 1200);

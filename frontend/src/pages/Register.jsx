@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Register = () => {
     // Initialize form data with empty strings
     const [formData, setFormData] = useState({
-        full_name: "",
+        name: "",
         nic: "",
         address: "",
         contact: "",
@@ -97,14 +97,14 @@ const Register = () => {
                             <div className="grid gap-6 mb-6 md:grid-cols-2">
                                 {/* Full Name */}
                                 <div>
-                                    <label htmlFor="full_name" className="block mb-2 text-sm font-medium text-gray-700">
+                                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-700">
                                         Full Name
                                     </label>
                                     <input
                                         type="text"
-                                        id="full_name"
-                                        name="full_name"
-                                        value={formData.full_name}
+                                        id="name"
+                                        name="name"
+                                        value={formData.name}
                                         onChange={handleChange}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                         placeholder="Salman Faris"

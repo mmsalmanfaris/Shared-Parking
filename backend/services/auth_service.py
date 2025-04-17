@@ -4,6 +4,7 @@ from jose import jwt, JWTError
 from fastapi import HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
+
 SECRET_KEY = "your-secret-key-here"
 ALGORITHM = "HS256"
 
@@ -20,7 +21,7 @@ def authenticate_user(id_token: str):
         custom_claims = user_record.custom_claims
         role = custom_claims.get("role", "user")
 
-        return {"email": user_record.email, "role": role}
+        return {"email": user_record.email, "role": role, "user_id": user_uid}
 
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
