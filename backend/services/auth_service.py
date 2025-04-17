@@ -3,10 +3,11 @@ from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from fastapi import HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from config.config import settings
 
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
 
-SECRET_KEY = "your-secret-key-here"
-ALGORITHM = "HS256"
 
 security = HTTPBearer()
 
@@ -26,6 +27,7 @@ def authenticate_user(id_token: str):
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
 
+
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(hours=1)
@@ -39,8 +41,6 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload  # Return the decoded token payload (e.g., user ID, role)
+        return payload  # ✅ This should be a dict
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
-    except Exception:
-        raise HTTPException(status_code=401, detail="Could not validate credentials")

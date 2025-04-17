@@ -10,18 +10,26 @@ const ProtectedUserRoute = ({ children, requiredRole }) => {
         return <Navigate to="../login" />;
     }
 
-    let decode;
+    let decoded;
     try {
-        decode = jwtDecode(token);
+        decoded = jwtDecode(token);
     } catch (error) {
         return <Navigate to="../login" />;
     }
 
-    if (!decode.role) {
+    const currentTime = Date.now() / 1000; // in seconds
+
+    // Check if token is expired
+    if (decoded.exp < currentTime) {
+        localStorage.removeItem("token"); // Optional cleanup
         return <Navigate to="../login" />;
     }
 
-    if (requiredRole && decode.role !== requiredRole) {
+    if (!decoded.role) {
+        return <Navigate to="../login" />;
+    }
+
+    if (requiredRole && decoded.role !== requiredRole) {
         return <Navigate to="../login" />;
     }
     return children
