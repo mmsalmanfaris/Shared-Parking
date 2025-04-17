@@ -12,17 +12,13 @@ def login(credentials: LoginModel):
         user = authenticate_user(credentials.idToken)
 
         # Generate a JWT token
-        token_data = {"sub": user["email"], "role": user["role"]}
+        token_data = {"sub": user["email"], "role": user["role"], "id": user["user_id"]}
         token = create_access_token(token_data)
 
         # Return the token and user details
         return {
             "access_token": token,
-            "token_type": "bearer",
-            "user": {
-                "email": user["email"],
-                "role": user["role"]
-            }
+            "token_type": "bearer"
         }
 
     except Exception as e:

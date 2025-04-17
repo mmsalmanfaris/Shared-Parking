@@ -16,7 +16,7 @@ const vehicle = () => {
         // Fetch vehicles from your backend
         const fetchVehicles = async () => {
             try {
-                // const response = await axios.get("http://127.0.0.1:8000/api/vehicle");
+                const response = await axios.get("http://127.0.0.1:8000/api/vehicle");
 
                 if (response.status !== 200) {
                     throw new Error("Failed to fetch vehicles.");
