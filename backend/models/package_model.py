@@ -7,7 +7,7 @@ from typing import Optional
 class packageModal(BaseModel):
     name: str
     description: str
-    duration: int
+    duration: str
     feature: str
     amount: int
     created_at: Optional[datetime] = None

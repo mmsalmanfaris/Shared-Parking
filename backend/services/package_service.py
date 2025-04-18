@@ -16,7 +16,7 @@ def get_all_packages():
             package_data = {
                 "name": data.get("name", "Unknown"),
                 "description": data.get("description", "Unknown"),
-                "duration": data.get("duration", 0),
+                "duration": data.get("duration", "Unknown"),
                 "feature": data.get("feature", "Unknown"),
                 "amount": data.get("amount", 0),
                 "created_at": data.get("created_at", "Unknown"),
@@ -44,3 +44,10 @@ def add_package(package: packageModal):
         }
     except Exception as e:
         raise ValueError(f"Error creating package: {str(e)}")
+    
+
+def delete_package(package_id: str):
+    package_ref = _db.collection("Package").document(package_id)
+    if not package_ref.get().exists:
+        raise ValueError("Package not found")
+    package_ref.delete()

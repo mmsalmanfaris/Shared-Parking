@@ -37,7 +37,6 @@ const AddPackageModal = ({ isOpen, onClose, onSubmit }) => {
         // converting string to integer
         const payload = {
             ...formData,
-            duration: parseInt(formData.duration),
             amount: parseInt(formData.amount),
         };
 
@@ -137,22 +136,23 @@ const AddPackageModal = ({ isOpen, onClose, onSubmit }) => {
                                     />
                                 </div>
 
-                                {/* Duration */}
+                                {/* duration */}
                                 <div>
                                     <label htmlFor="duration" className="block mb-2 text-sm font-medium text-gray-700">
-                                        Duration (in days)
+                                        Duration
                                     </label>
                                     <input
-                                        type="number"
+                                        type="text"
                                         id="duration"
                                         name="duration"
                                         value={formData.duration}
                                         onChange={handleChange}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-                                        placeholder="30"
+                                        placeholder="Full access to all features"
                                         required
                                     />
                                 </div>
+
 
                                 {/* Feature */}
                                 <div>
