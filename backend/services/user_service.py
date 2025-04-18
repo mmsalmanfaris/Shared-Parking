@@ -17,7 +17,7 @@ def register_user(user_data: userModel):
             "role": "user"
         })
 
-        print(user.uid)
+        print("Auth Account Created")
         
         # Store user details in Firestore
         user_ref = _db.collection("User").document(user.uid)
@@ -29,9 +29,10 @@ def register_user(user_data: userModel):
             "created_at": firestore.SERVER_TIMESTAMP
         })
 
+        print("Firestore Account Created")
+
         # Store vehicle details in Firestore with a reference to the user ID
-        vehicle_ref = _db.collection("Vehicle")  # Fixed typo: "Vechicle" -> "Vehicle"
-        vehicle_ref.add({
+        vehicle_doc = _db.collection("Vehicle").add({
             "user_id": user.uid,  # Reference to the user's UID
             "brand": user_data.vehicle_brand,
             "model": user_data.vehicle_model,
@@ -39,6 +40,23 @@ def register_user(user_data: userModel):
             "plate_number": user_data.plate_number,
             "created_at": firestore.SERVER_TIMESTAMP
         })
+
+        print("Vehicle Created")
+
+        #grt vehicle ids
+        vehicle_ref_id = vehicle_doc[1].id
+
+        # store booking with vehicle slor
+        booking_ref = _db.collection("Booking")
+        booking_ref.add({
+            "vehicle_id": vehicle_ref_id,
+            "package_id": user_data.package_id,
+            "from_date": user_data.from_date,
+            "to_date": user_data.to_date,
+            "status": "pending"
+        })
+
+        print("Booking Created")
 
         return {"message": "User created successfully", "user_id": user.uid}  # Return user.uid
 

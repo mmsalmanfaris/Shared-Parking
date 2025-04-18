@@ -3,6 +3,7 @@ import Header from "@/components/Header"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 
 const Package = () => {
@@ -95,7 +96,7 @@ const Package = () => {
                                             </div>
                                         </div>
                                         <div class="pt-2">
-                                            <a href="/billing" type="button" target="_blank"
+                                            <Link to="../login"
                                                 class="inline-flex items-center group space-x-2.5 bg-blue-700 text-white py-4 px-5 rounded-2xl cursor-pointer"><span
                                                     class="w-full font-semibold text-base">Select Package</span>
                                                 <svg class="inline-block h-6" viewBox="0 0 24 25" fill="none"
@@ -103,7 +104,7 @@ const Package = () => {
                                                     <path d="M3 12.4999H21L14 19.4999M14 5.5L18 9.5" stroke="currentColor"
                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                                 </svg>
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

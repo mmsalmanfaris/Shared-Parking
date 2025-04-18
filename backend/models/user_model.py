@@ -14,6 +14,9 @@ class userModel(BaseModel):
     vehicle_model: str
     car_color: str
     plate_number: str
+    package_id: str
+    from_date: str
+    to_date: str
 
 
 class userUpdate(BaseModel):
@@ -27,6 +30,9 @@ class userUpdate(BaseModel):
     vehicle_model:Optional [str]
     car_color: Optional [str]
     plate_number: Optional [str]
+    package_id: Optional [str]
+    from_date: Optional [str]
+    to_date: Optional [str]
 
 
 # Admin Modal
@@ -51,4 +57,4 @@ class userResponse(userModel):
     id: str
 
     class Config:
-        from_attributes = True
+        orm_mode = True
