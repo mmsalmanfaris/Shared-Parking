@@ -53,7 +53,8 @@ def register_user(user_data: userModel):
             "package_id": user_data.package_id,
             "from_date": user_data.from_date,
             "to_date": user_data.to_date,
-            "status": "pending"
+            "slot_id": user_data.slot_id,
+            "payment_status": "pending"
         })
 
         print("Booking Created")

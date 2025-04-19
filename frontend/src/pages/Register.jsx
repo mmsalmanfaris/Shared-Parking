@@ -24,12 +24,15 @@ const Register = () => {
         package_id: "",
         from_date: "",
         to_date: "",
+        slot_id: ""
     });
 
     console.log(formData);
 
     const [loading, setLoading] = useState(false);
     const [selectedPackage, setSelectedPackage] = useState("");
+    const [selectedSlot, setSelectedSlot] = useState("");
+    const [Slots, setSlots] = useState([]);
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
     const [totalDays, setTotalDays] = useState(0);
@@ -52,6 +55,24 @@ const Register = () => {
             }
         };
         fetchPackages();
+    }, []);
+
+    useEffect(() => {
+        const fetchSlots = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/slot/active/");
+
+                if (response.status !== 200) {
+                    throw new Error("Failed to fetch slots.");
+                }
+                setSlots(response.data);
+            } catch (error) {
+                toast.error("Failed to fetch slots.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSlots();
     }, []);
 
 
@@ -94,7 +115,7 @@ const Register = () => {
 
         if (step === 2) {
             // Validate personal details before proceeding
-            if (!formData.vehicle_brand || !formData.vehicle_model || !formData.car_color || !formData.plate_number || !formData.package_id || !from || !to) {
+            if (!formData.vehicle_brand || !formData.vehicle_model || !formData.car_color || !formData.plate_number || !formData.package_id || !from || !to || !form.slot_id) {
                 toast.warning("Please fill all personal details.");
                 return;
             }
@@ -370,39 +391,67 @@ const Register = () => {
                                         </select>
                                     </div>
 
-                                    {/* From Date */}
-                                    <div>
-                                        <label htmlFor="fromDate" className="block mb-1 text-sm font-medium text-gray-700">From Date</label>
-                                        <input
-                                            type="date"
-                                            id="fromDate"
-                                            value={formData.from_date}
-                                            onChange={(e) => handleDateChange("from_date", e.target.value)}
-                                            required
-                                            className="..."
-                                        />
+                                    <div className="flex w-full md:col-span-2 ">
+                                        {/* From Date */}
+                                        <div>
+                                            <label htmlFor="fromDate" className="block mb-1 text-sm font-medium text-gray-700">From Date</label>
+                                            <input
+                                                type="date"
+                                                id="fromDate"
+                                                value={formData.from_date}
+                                                onChange={(e) => handleDateChange("from_date", e.target.value)}
+                                                required
+                                                className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                            />
+                                        </div>
+
+                                        {/* To Date */}
+                                        <div className="ml-5">
+                                            <label htmlFor="toDate" className="block mb-1 text-sm font-medium text-gray-700">To Date</label>
+                                            <input
+                                                type="date"
+                                                id="toDate"
+                                                value={formData.to_date}
+                                                onChange={(e) => handleDateChange("to_date", e.target.value)}
+                                                required
+                                                className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm "
+                                            />
+                                        </div>
+
+                                        {/* Total Days */}
+                                        <div className="ml-5 w-100">
+                                            <p className="mb-1 text-sm font-medium text-gray-700">Total Days</p>
+                                            <p className="text-blue-700 font-semibold mt-1 border rounded-lg p-2">
+                                                {totalDays > 0 ? `${totalDays} days` : "Please select dates"}
+                                            </p>
+                                        </div>
                                     </div>
 
-                                    {/* To Date */}
-                                    <div>
-                                        <label htmlFor="toDate" className="block mb-1 text-sm font-medium text-gray-700">To Date</label>
-                                        <input
-                                            type="date"
-                                            id="toDate"
-                                            value={formData.to_date}
-                                            onChange={(e) => handleDateChange("to_date", e.target.value)}
-                                            required
-                                            className="..."
-                                        />
-                                    </div>
-
-                                    {/* Total Days */}
+                                    {/* Package Selection */}
                                     <div className="md:col-span-2">
-                                        <label className="block text-sm font-medium text-gray-700">Total Days</label>
-                                        <p className="text-blue-700 font-semibold mt-1">
-                                            {totalDays > 0 ? `${totalDays} day(s)` : "Please select valid dates"}
-                                        </p>
+                                        <label htmlFor="slot_id" className="block mb-1 text-sm font-medium text-gray-700">
+                                            Select Available Slot
+                                        </label>
+                                        <select
+                                            id="slot_id"
+                                            name="slot_id"
+                                            value={selectedSlot}
+                                            onChange={(e) => {
+                                                setSelectedSlot(e.target.value);
+                                                setFormData({ ...formData, slot_id: e.target.value });
+                                            }}
+                                            required
+                                            className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                        >
+                                            <option value="">Choose a slot</option>
+                                            {Slots.map((slt) => (
+                                                <option key={slt.id} value={slt.id}>
+                                                    {slt.slotNo}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
+
 
                                     {/* Terms & Conditions */}
                                     <div className="md:col-span-2 flex items-start mt-2">
@@ -417,6 +466,7 @@ const Register = () => {
                                         </label>
                                     </div>
                                 </div>
+
 
                                 {/* Navigation Buttons */}
                                 <div className="flex justify-between mt-6">

@@ -1,4 +1,4 @@
-from services.slot_service import get_all_slots, add_slot, delete_slot_by_id
+from services.slot_service import get_all_slots, add_slot, delete_slot_by_id, get_active_slots
 from models.slot_model import sloteModal, slotResponse
 from fastapi import HTTPException, APIRouter
 
@@ -8,6 +8,14 @@ router = APIRouter()
 def get_all_slot():
     try:
         return get_all_slots()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch slots: {str(e)}")
+
+
+@router.get("/active", response_model=list[slotResponse])
+def get_active_slot():
+    try:
+        return get_active_slots()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch slots: {str(e)}")
 

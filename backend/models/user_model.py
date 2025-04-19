@@ -17,6 +17,7 @@ class userModel(BaseModel):
     package_id: str
     from_date: str
     to_date: str
+    slot_id: str
 
 
 class userUpdate(BaseModel):
@@ -33,6 +34,7 @@ class userUpdate(BaseModel):
     package_id: Optional [str]
     from_date: Optional [str]
     to_date: Optional [str]
+    slot_id: Optional [str]
 
 
 # Admin Modal
