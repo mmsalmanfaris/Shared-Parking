@@ -1,25 +1,30 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from models.auth_model import LoginModel
 from services.auth_service import authenticate_user, create_access_token
 
 router = APIRouter()
 
-@router.post("/login/")
-def login(credentials: LoginModel):
-    try:
-        # Authenticate the user using the ID token
-        user = authenticate_user(credentials.idToken)
 
-        # Generate a JWT token
+@router.post("/login/")
+async def login(request: Request):
+    try:
+        # 🔐 Extract token from header
+        auth_header = request.headers.get("Authorization")
+        if not auth_header or not auth_header.startswith("Bearer "):
+            raise HTTPException(status_code=401, detail="Missing or invalid Authorization header")
+
+        id_token = auth_header.split(" ")[1]
+
+        # Authenticate and generate access token
+        user = authenticate_user(id_token)
         token_data = {"sub": user["email"], "role": user["role"], "id": user["user_id"]}
         token = create_access_token(token_data)
 
-        # Return the token and user details
         return {
             "access_token": token,
             "token_type": "bearer"
         }
 
     except Exception as e:
-        raise HTTPException(status_code=401, detail=str(e))
+        raise HTTPException(status_code=401, detail=f"Login error: {str(e)}")

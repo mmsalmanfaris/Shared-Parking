@@ -22,16 +22,19 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
+
             // Send the user's ID token to the backend for verification
             const idToken = await user.getIdToken();
             const response = await fetch("http://127.0.0.1:8000/api/auth/login/", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ idToken }),
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${idToken}`
+                },
+                body: JSON.stringify(),
             });
 
             const data = await response.json();
-
 
             if (response.ok) {
 
