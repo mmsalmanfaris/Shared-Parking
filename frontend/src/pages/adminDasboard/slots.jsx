@@ -1,14 +1,14 @@
-import AddDeviceModel from "@/components/admin/AddDeviceModel"
+import AddUserModel from "@/components/admin/AddUserModel"
 import SideBar from "@/components/admin/SideBar"
 import TopBar from "@/components/admin/TopBar"
-import DeviceTable from "@/components/admin/DeviceTable"
+import UserTable from "@/components/admin/UserTable"
 import fetchWithToken from "@/Validation/fetchWithToken"
 import { useEffect, useState } from "react"
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const devices = () => {
+const slots = () => {
     const [users, setUsers] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
@@ -120,16 +120,16 @@ const devices = () => {
                     <div className="flex justify-end">
                         <button
                             onClick={handleAddUser}
-                            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 mb-4">Add Device</button>
+                            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 mb-4">Add new slot</button>
                     </div>
 
-                    <DeviceTable
+                    <UserTable
                         users={users}
                         onEdit={handleEditUser}
                         onDelete={handleDeleteConfirmation}
                     />
 
-                    <AddDeviceModel
+                    <AddUserModel
                         isOpen={isModalOpen}
                         onClose={handleCloseModal}
                         onSubmit={handleSubmit}
@@ -215,4 +215,4 @@ const devices = () => {
     )
 }
 
-export default devices
+export default slots

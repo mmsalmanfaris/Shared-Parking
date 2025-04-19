@@ -14,6 +14,8 @@ import AdminReports from "../pages/adminDasboard/reports";
 import AdminDevices from "../pages/adminDasboard/devices";
 import AdminAlert from "../pages/adminDasboard/alerts";
 import AdminAdmins from "../pages/adminDasboard/admins"
+import AdminBookings from "../pages/adminDasboard/booking"
+import AdminSlots from "../pages/adminDasboard/slots"
 
 // User Dashboard
 import UserDashboard from "../pages/userDashboard/overview";
@@ -31,6 +33,12 @@ const ProtectedRoutes = () => {
             <Route path="/admin-dashboard" element={
                 <ProtectedAdminRoute requiredRole="admin">
                     <AdminDashboard />
+                </ProtectedAdminRoute>
+            }
+            />
+            <Route path="/admin-dashboard/bookings" element={
+                <ProtectedAdminRoute requiredRole="admin">
+                    <AdminBookings />
                 </ProtectedAdminRoute>
             }
             />
@@ -67,6 +75,11 @@ const ProtectedRoutes = () => {
             <Route path="admin-dashboard/devices" element={
                 <ProtectedAdminRoute requiredRole="admin">
                     <AdminDevices />
+                </ProtectedAdminRoute>
+            } />
+            <Route path="admin-dashboard/slots" element={
+                <ProtectedAdminRoute requiredRole="admin">
+                    <AdminSlots />
                 </ProtectedAdminRoute>
             } />
             <Route path="admin-dashboard/alerts" element={

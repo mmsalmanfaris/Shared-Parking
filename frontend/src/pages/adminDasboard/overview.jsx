@@ -7,12 +7,12 @@ const Overview = () => {
 
         <div class="flex h-screen">
             {/* <!-- Sidebar --> */}
-            <aside class="w-64 bg-gray-900 text-white">
+            <aside class="w-64 bg-gray-900 overflow-clip text-white">
                 <SideBar />
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 bg-gray-100">
+            <main className="flex-1 bg-gray-100 ">
                 <TopBar />
 
 

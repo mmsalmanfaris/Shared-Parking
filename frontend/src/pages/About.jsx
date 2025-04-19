@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer"
 import Header from "@/components/Header"
+import { Link } from "react-router-dom"
 
 const About = () => {
     return (
@@ -60,105 +61,97 @@ const About = () => {
                                 </dl>
                             </div>
                             <div class="mt-10 flex items-center gap-x-6">
-                                <a href="#"
+                                <Link to={"/packages"}
                                     class="rounded-md bg-blue-700 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-800  focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Start
                                     for one month
-                                </a>
-                                <a href="#" class="text-sm font-semibold leading-6 text-gray-700">Free Package
+                                </Link>
+                                <Link to={"/packages"} class="text-sm font-semibold leading-6 text-gray-700">Free Package
                                     <span aria-hidden="true">→</span>
-                                </a>
+                                </Link>
                             </div>
-                        </div><img src="https://plus.unsplash.com/premium_photo-1661916866784-cdea580d93f7?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product screenshot" class="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1000" />
+                        </div>
+                        <img src="https://plus.unsplash.com/premium_photo-1661916866784-cdea580d93f7?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            alt="Product screenshot"
+                            class="w-[20rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="500" />
                     </div>
                 </div>
             </section>
 
 
-            <section>
-                <section class=" my-20">
-                    <div class="py-12 bg-white">
-                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section class="my-20">
+                <div class="py-16 bg-white dark:bg-gray-900">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        {/* Header */}
+                        <div class="lg:text-center">
+                            <h2 class="font-heading mb-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg md:w-auto text-xs font-semibold tracking-widest uppercase">
+                                Why Choose Us?
+                            </h2>
+                            <p class="font-heading mt-4 text-3xl leading-8 font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+                                We know tech, we know finance. We are fintech experts.
+                            </p>
+                            <p class="mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-400 lg:mx-auto">
+                                We handle taxation for all the countries we operate in. We care for our users and help them manage cash flows effectively.
+                            </p>
+                        </div>
 
-                            <div class="lg:text-center">
-                                <h2
-                                    class="font-heading mb-4 bg-orange-100 text-orange-800 px-4 py-2 rounded-lg md:w-64 md:mx-auto text-xs font-semibold tracking-widest text-black uppercase title-font">
-                                    Why choose us?
-                                </h2>
-                                <p class="font-heading mt-2 text-3xl leading-8 font-semibold tracking-tight text-gray-900 sm:text-4xl">
-                                    We know tech, we know finance. We are fintech experts.
-                                </p>
-                                <p class="mt-4 max-w-2xl text-lg text-gray-500 lg:mx-auto">
-                                    We know how to handle taxation for all the
-                                    countried we operate in. We care for our users and help them manage cashflows.
-                                </p>
+                        {/* Features Grid */}
+                        <div class="mt-16">
+                            <div class="space-y-8 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-x-8 md:gap-y-12">
+                                {/* Card 1: Automated Parking */}
+                                <div class="relative rounded-2xl border p-6 text-center">
+                                    <div class="flex items-center justify-center h-12 w-12 mx-auto rounded-md bg-primary-500 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2H5a2 2 0 00-2 2v2"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="mt-4 text-lg font-bold text-gray-900 dark:text-white">Automated Parking</h3>
+                                    <p class="mt-2 text-base text-gray-600 dark:text-gray-400">
+                                        Streamline parking processes with our automated system..
+                                    </p>
+                                </div>
+
+                                {/* Card 2: Flexible Payments */}
+                                <div class="relative rounded-2xl border p-6 text-center">
+                                    <div class="flex items-center justify-center h-12 w-12 mx-auto rounded-md bg-primary-500 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="mt-4 text-lg font-bold text-gray-900 dark:text-white">Flexible Payments</h3>
+                                    <p class="mt-2 text-base text-gray-600 dark:text-gray-400">
+                                        Enjoy seamless payment options tailored to your needs.
+                                    </p>
+                                </div>
+
+                                {/* Card 3: Free One-Day Trial */}
+                                <div class="relative rounded-2xl border p-6 text-center">
+                                    <div class="flex items-center justify-center h-12 w-12 mx-auto rounded-md bg-primary-500 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="mt-4 text-lg font-bold text-gray-900 dark:text-white">Free One-Day Trial</h3>
+                                    <p class="mt-2 text-base text-gray-600 dark:text-gray-400">
+                                        Experience our platform risk-free with a complimentary one-day trial.
+                                    </p>
+                                </div>
+
+                                {/* Card 4: Multiple Vehicles */}
+                                <div class="relative rounded-2xl border p-6 text-center">
+                                    <div class="flex items-center justify-center h-12 w-12 mx-auto rounded-md bg-primary-500 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2H5a2 2 0 00-2 2v2"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="mt-4 text-lg font-bold text-gray-900 dark:text-white">Multiple Vehicles</h3>
+                                    <p class="mt-2 text-base text-gray-600 dark:text-gray-400">
+                                        Manage multiple vehicles effortlessly with our intuitive and scalable platform.
+                                    </p>
+                                </div>
                             </div>
-
-                            <div class="mt-10">
-                                <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
-                                    <div class="relative">
-                                        <dt>
-                                            <div
-                                                class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary-500 text-white">
-                                                <img src="https://www.svgrepo.com/show/503163/api-settings.svg" />
-                                            </div>
-                                            <p class="font-heading ml-16 text-lg leading-6 font-bold text-gray-700">Automated Parking</p>
-                                        </dt>
-                                        <dd class="mt-2 ml-16 text-base text-gray-500">
-                                            Lorem ipsum, dolor sit amet consectetur
-                                            adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
-                                            blanditiis ratione.
-                                        </dd>
-                                    </div>
-                                    <div class="relative">
-                                        <dt>
-                                            <div
-                                                class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary-500 text-white">
-                                                <img src="https://www.svgrepo.com/show/503138/webpack.svg" />
-                                            </div>
-                                            <p class="font-heading ml-16 text-lg leading-6 font-bold text-gray-700">Flexible Payments
-                                            </p>
-                                        </dt>
-                                        <dd class="mt-2 ml-16 text-base text-gray-500"> Lorem ipsum, dolor sit amet consectetur
-                                            adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
-                                            blanditiis ratione.
-                                        </dd>
-                                    </div>
-                                    <div class="relative">
-                                        <dt>
-                                            <div
-                                                class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary-500 text-white">
-                                                <img src="https://www.svgrepo.com/show/511771/dashboard-671.svg" />
-
-                                            </div>
-                                            <p class="font-heading ml-16 text-lg leading-6 font-bold text-gray-700">Free one day Trail
-                                            </p>
-                                        </dt>
-                                        <dd class="mt-2 ml-16 text-base text-gray-500"> Lorem ipsum, dolor sit amet consectetur
-                                            adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
-                                            blanditiis ratione.
-                                        </dd>
-                                    </div>
-                                    <div class="relative">
-                                        <dt>
-                                            <div
-                                                class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary-500 text-white">
-                                                <img src="https://www.svgrepo.com/show/76267/free-commercial-label.svg" />
-
-                                            </div>
-                                            <p class="font-heading ml-16 text-lg leading-6 font-bold text-gray-700">Multiple Vehicles
-                                            </p>
-                                        </dt>
-                                        <dd class="mt-2 ml-16 text-base text-gray-500"> Lorem ipsum, dolor sit amet consectetur
-                                            adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate
-                                            blanditiis ratione.
-                                        </dd>
-                                    </div>
-                                </dl>
-                            </div>
-
                         </div>
                     </div>
-                </section>
+                </div>
             </section>
 
             <Footer />

@@ -18,13 +18,13 @@ def get_all_vehicles():
                 "plate_number": data.get("plate_number", "Unknown"),
                 "created_at": data.get("created_at", "Unknown"),
                 "user_id": data.get("user_id", "Unknown"),
-                "id": doc_id,  # ✅ This is important
+                "id": doc_id,
             }
 
             # Get user name
             user_id = data.get("user_id")
             if user_id:
-                user_ref = _db.collection("user").document(user_id)
+                user_ref = _db.collection("User").document(user_id)
                 user_doc = user_ref.get()
                 if user_doc.exists:
                     user_data = user_doc.to_dict()
