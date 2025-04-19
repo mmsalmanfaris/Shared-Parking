@@ -3,68 +3,36 @@ import { MdOutlineDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { useTable, usePagination, useGlobalFilter } from "react-table";
 
-const UserTable = ({ users, onEdit, onDelete }) => {
-    // Define table columns
+const SlotTable = ({ slots, onEdit, onDelete }) => {
+    // Define table columns dynamically
     const columns = React.useMemo(
         () => [
             {
-                Header: "Name",
-                accessor: "name", // Accessor refers to the key in the data object
+                Header: "Device",
+                accessor: "device_id", // Accessor refers to the key in the data object
             },
             {
-                Header: "Email",
-                accessor: "email",
+                Header: "Slot Number",
+                accessor: "slotNo", // Slot number field
             },
             {
-                Header: "NIC",
-                accessor: "nic",
-            },
-            {
-                Header: "No. Plate",
-                accessor: "vehicles",
+                Header: "Status",
+                accessor: "status", // Status field (e.g., active, inactive, maintenance)
                 Cell: ({ value }) => (
-                    <div className="flex flex-col gap-2">
-                        {Array.isArray(value) && value.length > 0 ? (
-                            value.map((v, i) => (
-                                <div key={i} className="relative group">
-                                    {/* Plate Number and More Info Button */}
-                                    <div className="flex items-center justify-between ">
-                                        <span>{v.plate_number}</span>
-                                        <button type="button" className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-2 py-1 text-center me-2 mb-2">More Info</button>
-                                    </div>
-
-                                    <div className="absolute z-20 hidden group-hover:flex flex-col gap-3 bg-white border border-gray-300 p-3 rounded-xl shadow-xl top-full mt-2 left-0 w-64 transition-all duration-200">
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium text-gray-600">Brand:</span>
-                                            <span className="text-gray-800">{v.brand || "N/A"}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium text-gray-600">Model:</span>
-                                            <span className="text-gray-800">{v.model || "N/A"}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium text-gray-600">Color:</span>
-                                            <span className="text-gray-800">{v.color || "N/A"}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium text-gray-600">Created:</span>
-                                            <span className="text-gray-800">
-                                                {v.created_at ? new Date(v.created_at).toLocaleString() : "N/A"}
-                                            </span>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            ))
-                        ) : (
-                            <span className="italic text-gray-500">No vehicles</span>
-                        )}
-                    </div>
-                )
+                    <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${value === "active"
+                            ? "bg-green-500 text-white"
+                            : value === "inactive"
+                                ? "bg-yellow-500 text-white"
+                                : "bg-red-500 text-white"
+                            }`}
+                    >
+                        {value.charAt(0).toUpperCase() + value.slice(1)}
+                    </span>
+                ),
             },
             {
-                Header: "Time",
+                Header: "Created At",
                 accessor: "created_at", // Access the `created_at` field
                 Cell: ({ value }) => {
                     // Format the date and time
@@ -72,7 +40,6 @@ const UserTable = ({ users, onEdit, onDelete }) => {
                     return <span>{formattedDate}</span>;
                 },
             },
-
             {
                 Header: "Action",
                 accessor: "id", // Use the ID for actions
@@ -81,8 +48,8 @@ const UserTable = ({ users, onEdit, onDelete }) => {
                         {/* Edit Button */}
                         <button
                             onClick={() => {
-                                const user = users.find((u) => u.id === value);
-                                onEdit(user);
+                                const slot = slots.find((d) => d.id === value);
+                                onEdit(slot);
                             }}
                             className="font-medium bg-blue-700 text-white p-1 me-2 text-xl rounded-sm"
                         >
@@ -99,11 +66,11 @@ const UserTable = ({ users, onEdit, onDelete }) => {
                 ),
             },
         ],
-        [users, onEdit, onDelete]
+        [slots, onEdit, onDelete]
     );
 
     // Prepare data for the table
-    const data = React.useMemo(() => users, [users]);
+    const data = React.useMemo(() => slots, [slots]);
 
     // Initialize React Table
     const {
@@ -112,16 +79,14 @@ const UserTable = ({ users, onEdit, onDelete }) => {
         headerGroups,
         page, // Current page data (for pagination)
         prepareRow,
-        state: { globalFilter }, // Global search state
+        state: { globalFilter, pageIndex, pageSize }, // Global search and pagination state
         setGlobalFilter, // Function to update global search
         canPreviousPage,
         canNextPage,
-        pageOptions,
-        pageCount,
-        gotoPage,
         nextPage,
         previousPage,
         setPageSize,
+        pageCount,
     } = useTable(
         {
             columns,
@@ -162,14 +127,17 @@ const UserTable = ({ users, onEdit, onDelete }) => {
                         id="table-search"
                         value={globalFilter || ""}
                         onChange={(e) => setGlobalFilter(e.target.value)}
-                        placeholder="Search for admins..."
+                        placeholder="Search for slots..."
                         className="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     />
                 </div>
             </div>
 
             {/* Table */}
-            <table {...getTableProps()} className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table
+                {...getTableProps()}
+                className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+            >
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     {headerGroups.map((headerGroup) => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
@@ -221,34 +189,36 @@ const UserTable = ({ users, onEdit, onDelete }) => {
 
             {/* Pagination Controls */}
             <div className="flex justify-between items-center mt-4 pb-10">
-                <div>
+                <div className="flex space-x-2">
                     <button
                         onClick={() => previousPage()}
                         disabled={!canPreviousPage}
                         className="px-3 py-1 bg-blue-200 rounded disabled:opacity-50"
+                        aria-label="Previous page"
                     >
                         Previous
                     </button>
-                    <span className="mx-2 text-gray-500">
-                        Page{" "}
-                        {pageOptions.findIndex((p) => p === page) + 1} of {pageOptions.length}
+                    <span className="text-gray-500">
+                        Page {pageIndex + 1} of {pageCount}
                     </span>
                     <button
                         onClick={() => nextPage()}
                         disabled={!canNextPage}
                         className="px-3 py-1 bg-blue-200 rounded disabled:opacity-50"
+                        aria-label="Next page"
                     >
                         Next
                     </button>
                 </div>
                 <select
-                    value={5} // Default page size
+                    value={pageSize}
                     onChange={(e) => setPageSize(Number(e.target.value))}
-                    className="px-5 py-1 border rounded "
+                    className="px-5 py-1 border rounded"
+                    aria-label="Rows per page"
                 >
-                    {[5, 10, 20].map((pageSize) => (
-                        <option key={pageSize} value={pageSize}>
-                            Show {pageSize}
+                    {[5, 10, 20].map((pageSizeOption) => (
+                        <option key={pageSizeOption} value={pageSizeOption}>
+                            Show {pageSizeOption}
                         </option>
                     ))}
                 </select>
@@ -257,4 +227,4 @@ const UserTable = ({ users, onEdit, onDelete }) => {
     );
 };
 
-export default UserTable;
+export default SlotTable;

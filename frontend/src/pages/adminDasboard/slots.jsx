@@ -1,49 +1,46 @@
-import AddUserModel from "@/components/admin/AddUserModel"
-import SideBar from "@/components/admin/SideBar"
-import TopBar from "@/components/admin/TopBar"
-import UserTable from "@/components/admin/UserTable"
-import fetchWithToken from "@/Validation/fetchWithToken"
-import { useEffect, useState } from "react"
+import AddSlotModal from "@/components/admin/AddSlotModel";
+import SideBar from "@/components/admin/SideBar";
+import TopBar from "@/components/admin/TopBar";
+import SlotTable from "@/components/admin/SlotTable";
+import fetchWithToken from "@/Validation/fetchWithToken";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const slots = () => {
-    const [users, setUsers] = useState([]);
+const Slots = () => {
+    const [slots, setSlots] = useState([]); // Changed from devices to slots
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingUser, setEditingUser] = useState(null);
-    const [userToDelete, setUserToDelete] = useState(null);
+    const [editingSlot, setEditingSlot] = useState(null); // Changed from editingDevice to editingSlot
+    const [slotToDelete, setSlotToDelete] = useState(null); // Changed from deviceToDelete to slotToDelete
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchSlots = async () => {
             try {
-                const response = await fetchWithToken("http://127.0.0.1:8000/api/user/")
-                if (!response) {
-                    throw new Error("Failed to fetch Users");
-                }
-                const data = await response.json()
-                setUsers(data);
+                const response = await fetchWithToken("http://127.0.0.1:8000/api/slot/"); // Updated API endpoint
+                const data = await response.json();
+                setSlots(data);
             } catch (error) {
-                console.error("Error fetching users:", error.message);
+                console.error("Error fetching slots:", error.message);
             }
         };
-        fetchUsers();
-    }, [])
 
-    const handleAddUser = () => {
-        setEditingUser(null);
+        fetchSlots();
+    }, []);
+
+    const handleAddSlot = () => {
+        setEditingSlot(null);
         setIsModalOpen(true);
     };
 
-    const handleEditUser = (user) => {
-        setEditingUser(user);
+    const handleEditSlot = (slot) => {
+        setEditingSlot(slot);
         setIsModalOpen(true);
     };
 
     const handleDeleteConfirmation = (id) => {
-        setUserToDelete(id);
-        const modal = document.getElementById("popup-modal");
-        modal.classList.remove("hidden");
+        setSlotToDelete(id);
+        document.getElementById("popup-modal").classList.remove("hidden");
     };
 
     const handleCloseModal = () => {
@@ -51,97 +48,79 @@ const slots = () => {
     };
 
     const handleSubmit = (formData) => {
-        if (editingUser) {
-            // Update existing user in the local state
-            setUsers((prev) =>
-                prev.map((user) => (user.id === editingUser.id ? { ...user, ...formData } : user))
+        if (editingSlot) {
+            setSlots((prev) =>
+                prev.map((slot) => (slot.id === editingSlot.id ? { ...slot, ...formData } : slot))
             );
         } else {
-            // Add new user to the local state
-            setUsers((prev) => [...prev, { id: Date.now(), ...formData }]);
+            setSlots((prev) => [...prev, { id: Date.now(), ...formData }]);
         }
+        setIsModalOpen(false);
     };
 
-    const handleDeleteUser = async () => {
+    const handleDeleteSlot = async () => {
         try {
-            // Make a DELETE request to the backend
-            const id = userToDelete;
-            const response = await axios.delete(`http://127.0.0.1:8000/api/user/${id}`);
-            console.log(response.data.message); // Log success message
+            const id = slotToDelete;
+            await axios.delete(`http://127.0.0.1:8000/api/slot/${id}`); // Updated API endpoint
 
-            // Remove from the local state
-            setUsers((prev) => prev.filter((user) => user.id !== id));
+            setSlots((prev) => prev.filter((slot) => slot.id !== id));
 
-            // Show success message
-            toast.success("User deleted successfully!", {
+            toast.success("Slot deleted successfully!", {
                 position: "top-right",
                 autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
             });
 
-            // Hide the modal
-            const modal = document.getElementById("popup-modal");
-            modal.classList.add("hidden");
-
-            // Clear the adminToDelete state
-            setUserToDelete(null);
-
+            document.getElementById("popup-modal").classList.add("hidden");
+            setSlotToDelete(null);
         } catch (error) {
-            console.error("Error deleting admin:", error.response?.data || error.message);
-
-            // Show error message
-            toast.error(error.response?.data?.detail || "An error occurred while deleting the user.", {
+            console.error("Error deleting slot:", error.response?.data || error.message);
+            toast.error("Failed to delete slot.", {
                 position: "top-right",
                 autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
             });
         }
     };
-
-
 
     return (
-        <div class="flex h-screen">
-            {/* <!-- Sidebar --> */}
-            <aside class="w-64 bg-gray-900 text-white">
+        <div className="flex h-screen">
+            {/* Sidebar */}
+            <aside className="w-64 bg-gray-900 text-white">
                 <SideBar />
             </aside>
 
-            {/* <!-- Main Content --> */}
-            <main class="flex-1  bg-gray-100">
+            {/* Main Content */}
+            <main className="flex-1 bg-gray-100">
                 <TopBar />
-
                 <div className="p-6">
-
                     <div className="flex justify-end">
                         <button
-                            onClick={handleAddUser}
-                            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 mb-4">Add new slot</button>
+                            onClick={handleAddSlot}
+                            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 mb-4"
+                        >
+                            Add Slot
+                        </button>
                     </div>
 
-                    <UserTable
-                        users={users}
-                        onEdit={handleEditUser}
+                    {/* Slot Table */}
+                    <SlotTable
+                        slots={slots} // Updated prop name
+                        onEdit={handleEditSlot}
                         onDelete={handleDeleteConfirmation}
                     />
 
-                    <AddUserModel
+                    {/* Add/Edit Slot Modal */}
+                    <AddSlotModal
                         isOpen={isModalOpen}
                         onClose={handleCloseModal}
                         onSubmit={handleSubmit}
-                        user={editingUser}
+                        slot={editingSlot} // Updated prop name
                     />
-
                 </div>
 
-                {/* Delete Modal */}
+                {/* Delete Confirmation Modal */}
                 <div
                     id="popup-modal"
-                    className="hidden overflow-y-auto overflow-x-hidden fixed flex z-50 justify-center items-center w-full h-full bg-black/60  md:inset-0 h-[calc(100%-1rem)] "
+                    className="hidden overflow-y-auto overflow-x-hidden fixed flex z-50 justify-center items-center w-full h-full bg-black/60 md:inset-0 h-[calc(100%-1rem)]"
                 >
                     <div className="relative p-4 w-full max-w-md max-h-full">
                         <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
@@ -187,10 +166,10 @@ const slots = () => {
                                     />
                                 </svg>
                                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                                    Are you sure you want to delete this admin?
+                                    Are you sure you want to delete this slot?
                                 </h3>
                                 <button
-                                    onClick={handleDeleteUser}
+                                    onClick={handleDeleteSlot}
                                     type="button"
                                     className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2"
                                 >
@@ -212,7 +191,7 @@ const slots = () => {
                 </div>
             </main>
         </div>
-    )
-}
+    );
+};
 
-export default slots
+export default Slots;

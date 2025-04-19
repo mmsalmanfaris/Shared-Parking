@@ -7,8 +7,6 @@ const AddUserModal = ({ isOpen, onClose, onSubmit, device }) => {
     const [formData, setFormData] = useState({
         name: "",
         type_id: "",
-        status: "",
-        quantity: ""
     });
 
     const [devicetypes, setDeviceTypes] = useState([]);
@@ -17,7 +15,7 @@ const AddUserModal = ({ isOpen, onClose, onSubmit, device }) => {
     useEffect(() => {
         const fetchDeviceType = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/device/");
+                const response = await axios.get("http://127.0.0.1:8000/api/device/type/");
                 if (response.status !== 200) throw new Error("Failed to fetch device types.");
                 setDeviceTypes(response.data);
             } catch (error) {
@@ -32,15 +30,11 @@ const AddUserModal = ({ isOpen, onClose, onSubmit, device }) => {
             setFormData({
                 name: device.name || "",
                 type_id: device.type_id || "",
-                status: device.status || "",
-                quantity: device.quantity || ""
             });
         } else {
             setFormData({
                 name: "",
                 type_id: "",
-                status: "",
-                quantity: ""
             });
         }
     }, [device]);
@@ -135,30 +129,6 @@ const AddUserModal = ({ isOpen, onClose, onSubmit, device }) => {
                                         </option>
                                     ))}
                                 </select>
-                            </div>
-
-                            <div>
-                                <label className="block mb-2 text-sm font-medium text-gray-700">Status</label>
-                                <input
-                                    type="text"
-                                    name="status"
-                                    value={formData.status}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-lg"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block mb-2 text-sm font-medium text-gray-700">Quantity</label>
-                                <input
-                                    type="number"
-                                    name="quantity"
-                                    value={formData.quantity}
-                                    onChange={handleChange}
-                                    className="w-full p-2 border border-gray-300 rounded-lg"
-                                    required
-                                />
                             </div>
 
                             <button

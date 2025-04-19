@@ -3,7 +3,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { useTable, usePagination, useGlobalFilter } from "react-table";
 
-const UserTable = ({ users, onEdit, onDelete }) => {
+const DeviceTable = ({ devices, onEdit, onDelete }) => {
     // Define table columns
     const columns = React.useMemo(
         () => [
@@ -12,56 +12,8 @@ const UserTable = ({ users, onEdit, onDelete }) => {
                 accessor: "name", // Accessor refers to the key in the data object
             },
             {
-                Header: "Email",
-                accessor: "email",
-            },
-            {
-                Header: "NIC",
-                accessor: "nic",
-            },
-            {
-                Header: "No. Plate",
-                accessor: "vehicles",
-                Cell: ({ value }) => (
-                    <div className="flex flex-col gap-2">
-                        {Array.isArray(value) && value.length > 0 ? (
-                            value.map((v, i) => (
-                                <div key={i} className="relative group">
-                                    {/* Plate Number and More Info Button */}
-                                    <div className="flex items-center justify-between ">
-                                        <span>{v.plate_number}</span>
-                                        <button type="button" className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-2 py-1 text-center me-2 mb-2">More Info</button>
-                                    </div>
-
-                                    <div className="absolute z-20 hidden group-hover:flex flex-col gap-3 bg-white border border-gray-300 p-3 rounded-xl shadow-xl top-full mt-2 left-0 w-64 transition-all duration-200">
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium text-gray-600">Brand:</span>
-                                            <span className="text-gray-800">{v.brand || "N/A"}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium text-gray-600">Model:</span>
-                                            <span className="text-gray-800">{v.model || "N/A"}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium text-gray-600">Color:</span>
-                                            <span className="text-gray-800">{v.color || "N/A"}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium text-gray-600">Created:</span>
-                                            <span className="text-gray-800">
-                                                {v.created_at ? new Date(v.created_at).toLocaleString() : "N/A"}
-                                            </span>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            ))
-                        ) : (
-                            <span className="italic text-gray-500">No vehicles</span>
-                        )}
-                    </div>
-                )
+                Header: "Type",
+                accessor: "type_id",
             },
             {
                 Header: "Time",
@@ -81,8 +33,8 @@ const UserTable = ({ users, onEdit, onDelete }) => {
                         {/* Edit Button */}
                         <button
                             onClick={() => {
-                                const user = users.find((u) => u.id === value);
-                                onEdit(user);
+                                const device = devices.find((d) => d.id === value);
+                                onEdit(device);
                             }}
                             className="font-medium bg-blue-700 text-white p-1 me-2 text-xl rounded-sm"
                         >
@@ -99,11 +51,11 @@ const UserTable = ({ users, onEdit, onDelete }) => {
                 ),
             },
         ],
-        [users, onEdit, onDelete]
+        [devices, onEdit, onDelete]
     );
 
     // Prepare data for the table
-    const data = React.useMemo(() => users, [users]);
+    const data = React.useMemo(() => devices, [devices]);
 
     // Initialize React Table
     const {
@@ -257,4 +209,4 @@ const UserTable = ({ users, onEdit, onDelete }) => {
     );
 };
 
-export default UserTable;
+export default DeviceTable;

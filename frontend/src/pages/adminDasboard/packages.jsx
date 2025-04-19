@@ -137,7 +137,7 @@ const Packages = () => {
                                     <div className="p-4 space-y-2">
                                         <p><strong>Description:</strong> {p.description || "N/A"}</p>
                                         <p><strong>Features:</strong> {p.feature || "N/A"}</p>
-                                        <p><strong>Amount:</strong> ${p.amount || "N/A"}</p>
+                                        <p><strong>Amount:</strong> Rs.{p.amount || "N/A"}</p>
                                         <p><strong>Created:</strong> {p.created_at ? new Date(p.created_at).toLocaleString() : "N/A"}</p>
                                     </div>
                                 </div>
