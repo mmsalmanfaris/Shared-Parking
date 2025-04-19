@@ -54,7 +54,9 @@ def register_user(user_data: userModel):
             "from_date": user_data.from_date,
             "to_date": user_data.to_date,
             "slot_id": user_data.slot_id,
-            "payment_status": "pending"
+            "payment_status": "pending",
+            "is_active": True,
+            "created_at": firestore.SERVER_TIMESTAMP,
         })
 
         print("Booking Created")

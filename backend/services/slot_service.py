@@ -51,22 +51,32 @@ def delete_slot_by_id(slot_id: str):
 def get_active_slots():
     try:
         slot_ref = _db.collection("Slot").stream()
-        firestore_slot = {doc.id: doc.to_dict()
-                             for doc in slot_ref}
+        firestore_slot = {doc.id: doc.to_dict() for doc in slot_ref}
         slots = []
 
         for doc_id, data in firestore_slot.items():
-            slot_data = {
-                "device_id": data.get("device_id", "Unknown"),
-                "slotNo": data.get("slotNo", "Unknown"),
-                "status": data.get("status", "Unknown"),
-                "created_at": data.get("created_at", "Unknown"),
-                "id": doc_id
-            }
+            if data.get("status") != "active":
+                continue  # Skip inactive slots
 
-            for key, value in slot_data.items():
-                if key == "status" and value == "active":
-                    slots.append(slotResponse(**slot_data))
+            # Check if the slot is currently booked (active booking)
+            bookings = _db.collection("Booking")\
+                          .where("slot_id", "==", doc_id)\
+                          .where("is_active", "==", True)\
+                          .stream()
+
+            is_booked = any(True for _ in bookings)  # True if any active booking exists
+
+            if not is_booked:
+                slot_data = {
+                    "device_id": data.get("device_id", "Unknown"),
+                    "slotNo": data.get("slotNo", "Unknown"),
+                    "status": data.get("status", "Unknown"),
+                    "created_at": data.get("created_at", "Unknown"),
+                    "id": doc_id
+                }
+                slots.append(slotResponse(**slot_data))
+
         return slots
+
     except Exception as e:
-        raise ValueError(f"Error fetching devices: {str(e)}")
+        raise ValueError(f"Error fetching active slots: {str(e)}")

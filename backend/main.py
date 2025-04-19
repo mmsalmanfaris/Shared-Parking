@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from scheduler.bookin_scheduler import start_scheduler
+from contextlib import asynccontextmanager
+
 from routers.user_router import router as user_router
 from routers.auth_router import router as auth_router
 from routers.admin_router import router as admin_router
@@ -18,7 +21,17 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY")
 
 settings = Settings()
-app = FastAPI()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Code to run at startup
+    start_scheduler()
+    yield
+
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -36,8 +49,10 @@ app.include_router(package_router, prefix="/api/package", tags=["Package"])
 app.include_router(deviceType_router, prefix="/api/device", tags=["DeviceType"])
 app.include_router(slot_router, prefix="/api/slot", tags=["Slot"])
 
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Smart Parking System API", "SECRET_KEY": settings.SECRET_KEY}
+
 
 
