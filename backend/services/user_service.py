@@ -1,10 +1,21 @@
 from firebase_admin import firestore, auth
 from config.firebase_config import _db
 from models.user_model import userModel, userResponse
+import random
+from datetime import datetime
+from common.sms import send_sms
+
 
 
 # Registration form
 def register_user(user_data: userModel):
+
+    # Generating random Number for booking code
+    date_str = datetime.now().strftime("%Y%m%d")
+    random_str = ''.join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", k=5))
+    booking_code = f"BK{date_str}-{random_str}"
+
+
     try:
         # Create a new user in Firebase Authentication
         user = auth.create_user(
@@ -49,15 +60,31 @@ def register_user(user_data: userModel):
         # store booking with vehicle slor
         booking_ref = _db.collection("Booking")
         booking_ref.add({
+            "booking_code":booking_code,
             "vehicle_id": vehicle_ref_id,
             "package_id": user_data.package_id,
             "from_date": user_data.from_date,
             "to_date": user_data.to_date,
             "slot_id": user_data.slot_id,
-            "payment_status": "pending"
+            "payment_status": "pending",
+            "is_active": True,
+            "created_at": firestore.SERVER_TIMESTAMP,
         })
 
         print("Booking Created")
+
+        try:
+            sms_message=(
+                f"Welcome to Shared Parking. "
+                f"Your Booking No {booking_code}. Slot booked from {user_data.from_date} to {user_data.to_date}. Thank You."
+            )
+
+            send_sms(
+                recipient=user_data.contact,
+                message=sms_message
+            )
+        except Exception as e:
+            ValueError(f"Error SMS Function: {str(e)}")
 
         return {"message": "User created successfully", "user_id": user.uid}  # Return user.uid
 
@@ -66,6 +93,7 @@ def register_user(user_data: userModel):
 
 # Admin Dashboard User Page
 def create_user(user_data: userModel):
+
     try:
         # Create a new user in Firebase Authentication
         user = auth.create_user(
@@ -203,16 +231,44 @@ def update_user(user_id: str, updated_data: dict):
 
 
 
-def delete_user(user_id: str) -> bool:
-
+def delete_user(user_id: str) -> dict:
+    """
+    Deletes a user from Firebase Authentication and their associated data from Firestore.
+    Returns a success message or an error message.
+    """
     try:
+        # Step 1: Delete the user from Firebase Authentication
         auth.delete_user(user_id)
-        print(f"User Deleted: {user_id}")
-    except Exception as e:
-        print(f"Error delete user_id: {e}")
+        print(f"User Deleted from Firebase Authentication: {user_id}")
 
-    admin_ref = _db.collection("user").document(user_id)
-    if admin_ref.get().exists:
-        admin_ref.delete()
-        return {"message": "Admin Deleted Successfully", "Admin_Id": user_id}
-    return False
+        # Step 2: Delete the user's data from Firestore
+        user_ref = _db.collection("User").document(user_id)
+
+        # Check if the user exists in Firestore
+        user_doc = user_ref.get()
+        if user_doc.exists:
+            user_ref.delete()
+            print(f"User Data Deleted from Firestore: {user_id}")
+        else:
+            print(f"No User Data Found in Firestore for ID: {user_id}")
+
+        # Step 3: Delete all vehicles associated with the user
+        vehicles_deleted = 0
+        vehicle_query = _db.collection("Vehicle").where("user_id", "==", user_id).stream()
+
+        for vehicle_doc in vehicle_query:
+            vehicle_doc.reference.delete()  # Delete each vehicle document
+            vehicles_deleted += 1
+            print(f"Deleted Vehicle Document: {vehicle_doc.id}")
+
+        # Step 4: Return a success message
+        return {
+            "message": "User and associated data deleted successfully",
+            "user_id": user_id,
+            "vehicles_deleted": vehicles_deleted
+        }
+
+    except Exception as e:
+        # Handle any errors that occur during the process
+        print(f"Error during user deletion: {str(e)}")
+        return {"error": f"Failed to delete user: {str(e)}"}

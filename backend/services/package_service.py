@@ -17,7 +17,6 @@ def get_all_packages():
                 "name": data.get("name", "Unknown"),
                 "description": data.get("description", "Unknown"),
                 "duration": data.get("duration", "Unknown"),
-                "feature": data.get("feature", "Unknown"),
                 "amount": data.get("amount", 0),
                 "created_at": data.get("created_at", "Unknown"),
                 "id": doc_id
@@ -34,7 +33,6 @@ def add_package(package: packageModal):
             "name": package.name,
             "description": package.description,
             "duration": package.duration,
-            "feature": package.feature,
             "amount": package.amount,
             "created_at": firestore.SERVER_TIMESTAMP,
         })

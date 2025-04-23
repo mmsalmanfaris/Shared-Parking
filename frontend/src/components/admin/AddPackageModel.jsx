@@ -7,7 +7,6 @@ const AddPackageModal = ({ isOpen, onClose, onSubmit }) => {
         name: "",
         description: "",
         duration: "",
-        feature: "",
         amount: ""
     });
 
@@ -17,7 +16,6 @@ const AddPackageModal = ({ isOpen, onClose, onSubmit }) => {
                 name: "",
                 description: "",
                 duration: "",
-                feature: "",
                 amount: ""
             });
         }
@@ -139,10 +137,10 @@ const AddPackageModal = ({ isOpen, onClose, onSubmit }) => {
                                 {/* duration */}
                                 <div>
                                     <label htmlFor="duration" className="block mb-2 text-sm font-medium text-gray-700">
-                                        Duration
+                                        Total Days
                                     </label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         id="duration"
                                         name="duration"
                                         value={formData.duration}
@@ -154,27 +152,10 @@ const AddPackageModal = ({ isOpen, onClose, onSubmit }) => {
                                 </div>
 
 
-                                {/* Feature */}
-                                <div>
-                                    <label htmlFor="feature" className="block mb-2 text-sm font-medium text-gray-700">
-                                        Features Included
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="feature"
-                                        name="feature"
-                                        value={formData.feature}
-                                        onChange={handleChange}
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-                                        placeholder="Unlimited bookings, 24/7 support"
-                                        required
-                                    />
-                                </div>
-
                                 {/* Amount */}
                                 <div>
                                     <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-700">
-                                        Amount ($)
+                                        Amount (Rs)
                                     </label>
                                     <input
                                         type="number"
@@ -183,7 +164,7 @@ const AddPackageModal = ({ isOpen, onClose, onSubmit }) => {
                                         value={formData.amount}
                                         onChange={handleChange}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-                                        placeholder="49.99"
+                                        placeholder="5000.00"
                                         required
                                     />
                                 </div>

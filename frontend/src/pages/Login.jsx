@@ -36,6 +36,8 @@ const Login = () => {
 
             const data = await response.json();
 
+            console.log(data);
+
             if (response.ok) {
 
                 // Show error message

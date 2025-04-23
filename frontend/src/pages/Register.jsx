@@ -30,12 +30,10 @@ const Register = () => {
     console.log(formData);
 
     const [loading, setLoading] = useState(false);
-    const [selectedPackage, setSelectedPackage] = useState("");
+    const [selectedPackage, setSelectedPackage] = useState(null);
+    const [endDate, setEndDate] = useState("");
     const [selectedSlot, setSelectedSlot] = useState("");
     const [Slots, setSlots] = useState([]);
-    const [fromDate, setFromDate] = useState("");
-    const [toDate, setToDate] = useState("");
-    const [totalDays, setTotalDays] = useState(0);
     const [packages, setPackages] = useState([]);
 
 
@@ -56,6 +54,7 @@ const Register = () => {
         };
         fetchPackages();
     }, []);
+
 
     useEffect(() => {
         const fetchSlots = async () => {
@@ -82,18 +81,25 @@ const Register = () => {
             [type]: value,
         }));
 
-        const start = new Date(type === "from_date" ? value : formData.from_date);
-        const end = new Date(type === "to_date" ? value : formData.to_date);
+        if (type === "from_date" && selectedPackage) {
+            const startDate = new Date(value);
+            if (isNaN(startDate)) {
+                toast.error("Invalid start date.");
+                return;
+            }
 
-        if (!isNaN(start) && !isNaN(end) && end >= start) {
-            const diffTime = Math.abs(end - start);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            setTotalDays(diffDays);
-        } else {
-            setTotalDays(0);
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + selectedPackage.duration - 1);
+
+            const formattedEndDate = endDate.toISOString().split("T")[0];
+            setEndDate(formattedEndDate);
+
+            setFormData((prev) => ({
+                ...prev,
+                to_date: formattedEndDate,
+            }));
         }
     };
-
 
 
     // Handle input changes
@@ -177,6 +183,17 @@ const Register = () => {
             });
         } finally {
             setLoading(false); // Stop loading
+        }
+    };
+
+    const handlePackageChange = (packageId) => {
+        const selected = packages.find((pkg) => pkg.id === packageId);
+        if (selected) {
+            setSelectedPackage(selected);
+            setFormData((prev) => ({
+                ...prev,
+                package_id: selected.id,
+            }));
         }
     };
 
@@ -374,18 +391,15 @@ const Register = () => {
                                         <select
                                             id="package_id"
                                             name="package_id"
-                                            value={selectedPackage}
-                                            onChange={(e) => {
-                                                setSelectedPackage(e.target.value);
-                                                setFormData({ ...formData, package_id: e.target.value });
-                                            }}
+                                            value={formData.package_id} // Use the package ID from formData
+                                            onChange={(e) => handlePackageChange(e.target.value)} // Call the handler
                                             required
                                             className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm"
                                         >
                                             <option value="">Choose a package</option>
                                             {packages.map((pkg) => (
                                                 <option key={pkg.id} value={pkg.id}>
-                                                    {pkg.name}
+                                                    {pkg.name} ({pkg.duration} days - Rs.{pkg.amount})
                                                 </option>
                                             ))}
                                         </select>
@@ -405,25 +419,21 @@ const Register = () => {
                                             />
                                         </div>
 
-                                        {/* To Date */}
-                                        <div className="ml-5">
-                                            <label htmlFor="toDate" className="block mb-1 text-sm font-medium text-gray-700">To Date</label>
-                                            <input
-                                                type="date"
-                                                id="toDate"
-                                                value={formData.to_date}
-                                                onChange={(e) => handleDateChange("to_date", e.target.value)}
-                                                required
-                                                className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm "
-                                            />
+                                        <div className="ms-5 w-full">
+                                            {(
+                                                <div>
+                                                    <label className="block mb-1 text-sm font-medium text-gray-700">End Date</label>
+                                                    <p className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm"> {endDate ? endDate : "End date here"}</p>
+                                                </div>
+                                            )}
                                         </div>
-
-                                        {/* Total Days */}
-                                        <div className="ml-5 w-100">
-                                            <p className="mb-1 text-sm font-medium text-gray-700">Total Days</p>
-                                            <p className="text-blue-700 font-semibold mt-1 border rounded-lg p-2">
-                                                {totalDays > 0 ? `${totalDays} days` : "Please select dates"}
-                                            </p>
+                                        <div className="ms-5 w-full">
+                                            {(
+                                                <div>
+                                                    <label className="block mb-1 text-sm font-medium text-gray-700">Total Days</label>
+                                                    <p className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm"> {selectedPackage ? selectedPackage.duration : 0}</p>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 

@@ -21,4 +21,4 @@ class adminResponse(adminModel):
     id: str
 
     class Config:
-        from_attributes = True  # Use this instead of orm_mode
+        from_attributes = True  # Use this instead of from_attributes

@@ -7,8 +7,7 @@ from typing import Optional
 class packageModal(BaseModel):
     name: str
     description: str
-    duration: str
-    feature: str
+    duration: int
     amount: int
     created_at: Optional[datetime] = None
 
@@ -16,4 +15,4 @@ class packageResponse(packageModal):
     id: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True

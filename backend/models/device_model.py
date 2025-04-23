@@ -10,7 +10,7 @@ class deviceTypeResponse(deviceTypeModal):
     id: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Device
 class deviceModal(BaseModel):
@@ -22,4 +22,4 @@ class deviceResponse(deviceModal):
     created_at: Optional[datetime] = None  # Add created_at if you're returning it
 
     class Config:
-        orm_mode = True
+        from_attributes = True
