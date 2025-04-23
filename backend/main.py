@@ -59,6 +59,7 @@ app.include_router(activity_router, prefix="/api/activity", tags=["Activity"])
 app.include_router(alert_router, prefix="/api/alert", tags=["Alert"])
 
 
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Smart Parking System API", "SECRET_KEY": settings.SECRET_KEY}
