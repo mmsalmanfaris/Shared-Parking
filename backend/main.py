@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from scheduler.booking_scheduler import start_scheduler
 from contextlib import asynccontextmanager
+from datetime import datetime
+from config.firebase_config import _db
 
 from routers.user_router import router as user_router
 from routers.auth_router import router as auth_router
@@ -67,3 +69,32 @@ app.include_router(report_router, prefix="/api/report", tags=["Report"])
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Smart Parking System API", "SECRET_KEY": settings.SECRET_KEY}
+
+
+
+# To store API activites
+@app.middleware("http")
+async def log_api_usage(request: Request, call_next):
+ 
+    start_time = datetime.utcnow()
+    response = await call_next(request)
+    end_time = datetime.utcnow()
+
+    api_endpoint = request.url.path
+    method = request.method
+    status_code = response.status_code
+    duration = (end_time - start_time).total_seconds()
+
+    try:
+        api_log_ref = _db.collection("ApiUsage").document()
+        api_log_ref.set({
+            "endpoint": api_endpoint,
+            "method": method,
+            "status_code": status_code,
+            "duration_seconds": duration,
+            "timestamp": datetime.utcnow().isoformat(),
+        })
+    except Exception as e:
+        print(f"Failed to log API usage: {e}")
+
+    return response

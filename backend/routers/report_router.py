@@ -236,3 +236,30 @@ def get_bookings():
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
+
+@router.get("/api-usage")
+def get_api_usage(start_date: str = None, end_date: str = None):
+    """
+    Fetch API usage data within a date range.
+    """
+    try:
+        # Reference to the ApiUsage collection in Firestore
+        api_usage_ref = _db.collection("ApiUsage")
+
+        # Apply filters if start_date and end_date are provided
+        query = api_usage_ref
+        if start_date and end_date:
+            start_datetime = datetime.fromisoformat(start_date)
+            end_datetime = datetime.fromisoformat(end_date)
+            query = query.where("timestamp", ">=", start_datetime.isoformat()).where(
+                "timestamp", "<=", end_datetime.isoformat()
+            )
+
+        # Fetch data
+        api_usage_data = [doc.to_dict() for doc in query.stream()]
+
+        return api_usage_data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
