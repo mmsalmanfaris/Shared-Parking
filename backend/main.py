@@ -14,6 +14,7 @@ from routers.webcam_router import router as webcam_router
 from routers.esp32_router import router as esp32_router
 from routers.activity_router import router as activity_router
 from routers.alert_router import router as alert_router
+from routers.booking_router import router as booking_router
 
 
 from dotenv import load_dotenv
@@ -57,6 +58,7 @@ app.include_router(webcam_router, prefix="/api/webcam", tags=["Webcam"])
 app.include_router(esp32_router, prefix="/api/iot", tags=["ESP32"])
 app.include_router(activity_router, prefix="/api/activity", tags=["Activity"])
 app.include_router(alert_router, prefix="/api/alert", tags=["Alert"])
+app.include_router(booking_router, prefix="/api/booking", tags=["Booking"])
 
 
 

@@ -12,7 +12,7 @@ const booking = () => {
 
     // Simulate fetching users from the backend
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchBookings = async () => {
             try {
                 const response = await fetchWithToken("http://127.0.0.1:8000/api/booking/");
                 if (!response.ok) {
@@ -26,7 +26,7 @@ const booking = () => {
                 console.error("Error fetching booking:", error.message);
             }
         };
-        fetchUsers();
+        fetchBookings();
     }, []);
 
 
@@ -34,29 +34,36 @@ const booking = () => {
     const columns = React.useMemo(
         () => [
             {
-                Header: "Name",
-                accessor: (row) => row.user?.name || "Unknown",
-                id: "user_name", // React Table needs a unique ID when using a custom accessor
+                Header: "Booking No",
+                accessor: "booking_code"
             },
             {
-                Header: "Plate No",
-                accessor: "plate_number",
+                Header: "Vehicle",
+                accessor: "vehicle",
             },
             {
                 Header: "Package",
                 accessor: "package",
             },
             {
-                Header: "Status",
-                accessor: "status",
+                Header: "Active",
+                accessor: "is_active",
             },
             {
-                Header: "From",
-                accessor: "from",
+                Header: "Payment",
+                accessor: "payment_status",
             },
             {
-                Header: "To",
-                accessor: "to",
+                Header: "From Date",
+                accessor: "from_date",
+            },
+            {
+                Header: "To Date",
+                accessor: "to_date",
+            },
+            {
+                Header: "Slot",
+                accessor: "slot",
             },
             {
                 Header: "Time",
@@ -68,11 +75,11 @@ const booking = () => {
                 },
             }
         ],
-        [vehicles]
+        [bookings]
     );
 
     // Prepare data for the table
-    const data = React.useMemo(() => vehicles, [vehicles]);
+    const data = React.useMemo(() => bookings, [bookings]);
 
     // Initialize React Table
     const {
