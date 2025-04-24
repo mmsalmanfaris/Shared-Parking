@@ -263,3 +263,179 @@ def get_api_usage(start_date: str = None, end_date: str = None):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
+
+
+
+# ---------------------- USERS API ----------------------
+@router.get("/overview/users", response_model=list[dict])
+async def get_users():
+    """
+    Fetches user data from Firestore for the Users Overview section.
+    """
+    try:
+        users_ref = _db.collection("User")
+        users_snapshot = users_ref.stream()
+
+        users_data = []
+        for doc in users_snapshot:
+            user = doc.to_dict()
+            users_data.append({
+                "name": user.get("name"),
+                "nic": user.get("nic"),
+                "address": user.get("address"),
+                "contact": user.get("contact"),
+                "created_at": user.get("created_at")
+            })
+
+        return users_data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while fetching users data: {str(e)}")
+
+# ---------------------- VEHICLES API ----------------------
+@router.get("/overview/vehicles", response_model=list[dict])
+async def get_vehicles():
+    """
+    Fetches vehicle data from Firestore for the Vehicles Chart.
+    """
+    try:
+        vehicles_ref = _db.collection("Vehicle")
+        vehicles_snapshot = vehicles_ref.stream()
+
+        vehicles_data = []
+        for doc in vehicles_snapshot:
+            vehicle = doc.to_dict()
+            vehicles_data.append({
+                "type": vehicle.get("brand"),
+                "model": vehicle.get("model"),
+                "color": vehicle.get("color"),
+                "plate": vehicle.get("plate_number"),
+            })
+
+        return vehicles_data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while fetching vehicles data: {str(e)}")
+
+# ---------------------- BOOKINGS API ----------------------
+@router.get("/overview/bookings", response_model=list[dict])
+async def get_bookings():
+    """
+    Fetches booking data from Firestore for the Bookings Overview section.
+    """
+    try:
+        bookings_ref = _db.collection("Booking")
+        bookings_snapshot = bookings_ref.stream()
+
+        bookings_data = []
+        for doc in bookings_snapshot:
+            booking = doc.to_dict()
+            bookings_data.append({
+                "id": doc.id,
+                "vehicle_id": booking.get("vehicle_id"),
+                "start_time": booking.get("from_date"),
+                "end_time": booking.get("to_date"),
+                "status": booking.get("is_active"),
+            })
+
+        return bookings_data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while fetching bookings data: {str(e)}")
+
+# ---------------------- ALERTS API ----------------------
+@router.get("/overview/alerts", response_model=list[dict])
+async def get_alerts():
+    """
+    Fetches alert data from Firestore for the Alerts Overview section.
+    """
+    try:
+        alerts_ref = _db.collection("Alert")
+        alerts_snapshot = alerts_ref.order_by("timestamp", direction="DESCENDING").limit(10).stream()
+
+        alerts_data = []
+        for doc in alerts_snapshot:
+            alert = doc.to_dict()
+            alerts_data.append({
+                "detected_slot": alert.get("detected_slot"),
+                "status": alert.get("staus"),
+                "timestamp": alert.get("time"),
+            })
+
+        return alerts_data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while fetching alerts data: {str(e)}")
+
+# ---------------------- API USAGE API ----------------------
+@router.get("/overview/api-usage", response_model=list[dict])
+async def get_api_usage():
+    """
+    Fetches API usage data from Firestore for the API Usage Chart.
+    """
+    try:
+        api_usage_ref = _db.collection("ApiUsage")
+        api_usage_snapshot = api_usage_ref.order_by("timestamp", direction="DESCENDING").limit(100).stream()
+
+        api_usage_data = []
+        for doc in api_usage_snapshot:
+            usage = doc.to_dict()
+            api_usage_data.append({
+                "endpoint": usage.get("endpoint", "unknown"),
+                "method": usage.get("method", "unknown"),
+                "status_code": usage.get("status_code", 0),
+                "duration_seconds": usage.get("duration_seconds", 0),
+                "timestamp": usage.get("timestamp", None),
+            })
+
+        return api_usage_data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while fetching API usage data: {str(e)}")
+
+# ---------------------- DEVICES API ----------------------
+@router.get("/overview/devices", response_model=list[dict])
+async def get_devices():
+    """
+    Fetches device data from Firestore for the Devices Overview section.
+    """
+    try:
+        devices_ref = _db.collection("Device")
+        devices_snapshot = devices_ref.stream()
+
+        devices_data = []
+        for doc in devices_snapshot:
+            device = doc.to_dict()
+            devices_data.append({
+                "id": doc.id,
+                "name": device.get("name")
+            })
+        return devices_data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while fetching devices data: {str(e)}")
+
+
+# ---------------------- Useractivites API ----------------------
+@router.get("/overview/activites", response_model=list[dict])
+async def get_devices():
+    """
+    Fetches device data from Firestore for the Devices Overview section.
+    """
+    try:
+        devices_ref = _db.collection("UserActivites")
+        devices_snapshot = devices_ref.stream()
+
+        devices_data = []
+        for doc in devices_snapshot:
+            device = doc.to_dict()
+            devices_data.append({
+                "id": doc.id,
+                "entry_time": device.get("entry_time"),
+                "exit_time": device.get("exit_time")
+            })
+        return devices_data
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred while fetching devices data: {str(e)}")

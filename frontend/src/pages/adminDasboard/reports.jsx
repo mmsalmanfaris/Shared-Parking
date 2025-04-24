@@ -16,7 +16,7 @@ const Reports = () => {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1">
+            <main className="flex-1 overflow-y-auto">
                 <TopBar />
 
                 <div className="w-full">
