@@ -3,6 +3,7 @@ import AppRoutes from "./routes/AppRoutes";
 import ProtectedRoute from "./routes/ProtectedRoutes";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import "datatables.net-dt/css/dataTables.dataTables.min.css";
 
 
 
