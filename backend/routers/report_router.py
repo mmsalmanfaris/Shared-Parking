@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from firebase_admin import auth
 from config.firebase_config import _db  # Ensure this imports your Firebase app instance
 from datetime import datetime
+from collections import defaultdict
 
 router = APIRouter()
 
@@ -168,6 +169,70 @@ def get_vehicles():
             )
 
         return vehicles
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+    
+
+
+
+@router.get("/bookings")
+def get_bookings():
+    """
+    Fetch all bookings along with their details.
+    Includes aggregated data for payment status distribution and bookings per day.
+    """
+    try:
+        # Reference to the Booking collection in Firestore
+        bookings_ref = _db.collection("Booking").stream()
+
+        # Extract booking data
+        bookings = []
+        payment_status_count = defaultdict(int)
+        bookings_per_day = defaultdict(int)
+
+        for booking in bookings_ref:
+            booking_data = booking.to_dict()
+            booking_id = booking.id
+
+            # Aggregate payment status data
+            payment_status = booking_data.get("payment_status", "unknown")
+            payment_status_count[payment_status] += 1
+
+            # Aggregate bookings per day data
+            from_date = booking_data.get("from_date", "unknown")
+            bookings_per_day[from_date] += 1
+
+            # Append booking details to the list
+            bookings.append(
+                {
+                    "id": booking_id,
+                    "booking_code": booking_data.get("booking_code"),
+                    "from_date": booking_data.get("from_date"),
+                    "to_date": booking_data.get("to_date"),
+                    "payment_status": payment_status,
+                    "created_at": booking_data.get("created_at"),
+                    "is_active": booking_data.get("is_active"),
+                    "package_id": booking_data.get("package_id"),
+                    "slot_id": booking_data.get("slot_id"),
+                    "vehicle_id": booking_data.get("vehicle_id"),
+                }
+            )
+
+        # Convert aggregated data to lists for charts
+        payment_status_data = [
+            {"name": status, "value": count} for status, count in payment_status_count.items()
+        ]
+
+        bookings_per_day_data = [
+            {"from_date": date, "count": count} for date, count in bookings_per_day.items()
+        ]
+
+        return {
+            "bookings": bookings,
+            "payment_status_distribution": payment_status_data,
+            "bookings_per_day": bookings_per_day_data,
+        }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
