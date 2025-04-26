@@ -220,32 +220,10 @@ const Home = () => {
                                                 </div>
                                                 <div class="pt-5 text-gray-500 font-medium text-base space-y-1">
                                                     <div class="flex items-center align-bottom"><span class="pt-1.5">Rs.</span>
-                                                        <div class="ml-1 mr-2 text-2xl md:text-3xl font-bold text-gray-900"><span>{p.amount}</span>
-                                                        </div><span class="pt-1.5 fon">/Per day</span>
+                                                        <div class="ml-1 mr-2 text-2xl md:text-3xl font-bold text-gray-900"><span>{p.amount ? p.amount : "Free"}</span>
+                                                        </div><span class="pt-1.5 fon">{p.duration} days</span>
                                                     </div>
                                                     <span className="font-light">{p.description}</span>
-                                                </div>
-                                                <div class="">
-                                                    <ul class="space-y-2 pt-8">
-                                                        <li class="flex items-center font-medium space-x-2 text-black">
-                                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M16.4444 3.03947C15.1056 2.37412 13.5965 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 11.6244 21.9793 11.2537 21.939 10.8889M9 11L12 14L22 4"
-                                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round"></path>
-                                                            </svg><span>{p.duration}</span>
-                                                        </li>
-                                                        <li class="flex items-center font-medium space-x-2 text-black">
-                                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M16.4444 3.03947C15.1056 2.37412 13.5965 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 11.6244 21.9793 11.2537 21.939 10.8889M9 11L12 14L22 4"
-                                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                                    stroke-linejoin="round"></path>
-                                                            </svg><span>{p.feature}</span>
-                                                        </li>
-                                                    </ul>
                                                 </div>
                                             </div>
                                             <div class="pt-2">

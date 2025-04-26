@@ -4,8 +4,6 @@ import "react-toastify/dist/ReactToastify.css";
 import TopBar from "@/components/admin/TopBar";
 import fetchWithToken from "../../Validation/fetchWithToken";
 import { useTable, usePagination, useGlobalFilter, useFilters } from "react-table";
-import DropdownFilter from "../../components/DropdownFilter";
-
 
 
 const Alerts = () => {

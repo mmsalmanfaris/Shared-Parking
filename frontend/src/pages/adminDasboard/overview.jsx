@@ -1,25 +1,16 @@
 import React, { useEffect, useState } from "react";
 import SideBar from "@/components/admin/SideBar";
 import TopBar from "@/components/admin/TopBar";
-import {
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend,
-    PieChart,
-    Pie,
-    Cell,
-} from "recharts";
 import fetchWithToken from "@/Validation/fetchWithToken";
-import { FaUser, FaCar, FaCalendarCheck, FaMoneyBill, FaBell, FaChartBar } from "react-icons/fa";
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+import {
+    FaUser,
+    FaCar,
+    FaCalendarCheck,
+    FaBell,
+    FaChartBar,
+} from "react-icons/fa";
 
 const Overview = () => {
-    // State for fetched data
     const [usersData, setUsersData] = useState([]);
     const [vehiclesData, setVehiclesData] = useState([]);
     const [bookingsData, setBookingsData] = useState([]);
@@ -29,7 +20,6 @@ const Overview = () => {
     const [userActivitiesData, setUserActivitiesData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch data from backend APIs
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -51,6 +41,7 @@ const Overview = () => {
                     fetchWithToken("http://127.0.0.1:8000/api/report/overview/devices"),
                     fetchWithToken("http://127.0.0.1:8000/api/report/overview/activites"),
                 ]);
+
                 setUsersData(await usersRes.json());
                 setVehiclesData(await vehiclesRes.json());
                 setBookingsData(await bookingsRes.json());
@@ -67,180 +58,93 @@ const Overview = () => {
         fetchData();
     }, []);
 
-    // Aggregate data for charts
-    const vehiclesByType = vehiclesData.reduce((acc, vehicle) => {
-        acc[vehicle.type] = (acc[vehicle.type] || 0) + 1;
-        return acc;
-    }, {});
-
-    const vehiclesChartData = Object.entries(vehiclesByType).map(([type, count]) => ({
-        type,
-        count,
-    }));
-
-    const apiUsageByEndpoint = apiUsageData.reduce((acc, entry) => {
-        acc[entry.endpoint] = (acc[entry.endpoint] || 0) + 1;
-        return acc;
-    }, {});
-
-    const apiUsageChartData = Object.entries(apiUsageByEndpoint).map(([endpoint, count]) => ({
-        endpoint,
-        count,
-    }));
-
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center">
-                <div className="text-gray-800">Loading...</div>
+            <div className="flex h-screen items-center justify-center bg-gray-100">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="flex h-screen">
+        <div className="flex h-screen overflow-hidden bg-gray-50">
             {/* Sidebar */}
-            <aside className="w-64 bg-gray-900 overflow-clip text-white">
+            <aside className="w-64 bg-gray-900 text-white shadow-md">
                 <SideBar />
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 bg-gray-100">
+            <div className="flex-1 flex flex-col overflow-y-auto">
                 <TopBar />
 
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-                    {/* Users Overview */}
-                    <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-                        <FaUser size={40} className="text-blue-600 mb-4" />
-                        <h2 className="text-lg font-medium text-gray-800 mb-2">Users</h2>
-                        <ul className="mt-2 space-y-2 text-center">
-                            <li className="text-sm text-gray-600">
-                                Total Users: <span className="font-bold">{usersData.length}</span>
-                            </li>
-                        </ul>
-                    </div>
+                <main className="flex-1 px-8 py-6 space-y-6 bg-gray-100">
+                    <h1 className="text-2xl font-bold text-gray-800">Dashboard Overview</h1>
 
-                    {/* Vehicles Chart */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <FaCar size={40} className="text-green-600 mb-4" />
-                        <h2 className="text-lg font-medium text-gray-800 mb-4">Vehicles by Type</h2>
-                        <PieChart width={300} height={200}>
-                            <Pie
-                                data={vehiclesChartData}
-                                cx={150}
-                                cy={100}
-                                labelLine={false}
-                                label={({ name, percent }) =>
-                                    `${name}: ${(percent * 100).toFixed(0)}%`
-                                }
-                                outerRadius={80}
-                                fill="#8884d8"
-                                dataKey="count"
-                            >
-                                {vehiclesChartData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                            </Pie>
-                            <Tooltip />
-                            <Legend />
-                        </PieChart>
-                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Users Card */}
+                        <StatCard icon={<FaUser />} label="Users" value={usersData.length} color="blue" />
 
-                    {/* Bookings Overview */}
-                    <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-                        <FaCalendarCheck size={40} className="text-purple-600 mb-4" />
-                        <h2 className="text-lg font-medium text-gray-800 mb-2">Bookings</h2>
-                        <ul className="mt-2 space-y-2 text-center">
-                            <li className="text-sm text-gray-600">
-                                Total Bookings: <span className="font-bold">{bookingsData.length}</span>
-                            </li>
-                            <li className="text-sm text-gray-600">
-                                Active Bookings:{" "}
-                                <span className="font-bold">
-                                    {bookingsData.filter((booking) => booking.status === true).length}
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
+                        {/* Bookings Card */}
+                        <StatCard
+                            icon={<FaCalendarCheck />}
+                            label="Bookings"
+                            value={bookingsData.length}
+                            color="purple"
+                        />
 
-                    {/* Alerts Overview */}
-                    <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-                        <FaBell size={40} className="text-red-600 mb-4" />
-                        <h2 className="text-lg font-medium text-gray-800 mb-2">Alerts</h2>
-                        <ul className="mt-2 space-y-2 text-center">
-                            <li className="text-sm text-gray-600">
-                                Total Alerts: <span className="font-bold">{alertsData.length}</span>
-                            </li>
-                            <li className="text-sm text-gray-600">
-                                Recent Alerts:
-                                <ul className="list-disc ml-4">
-                                    {alertsData.slice(0, 5).map((alert, index) => (
-                                        <li key={index}>{alert.detected_slot}</li>
-                                    ))}
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                        {/* Devices Card */}
+                        <StatCard
+                            icon={<FaCar />}
+                            label="Devices"
+                            value={devicesData.length}
+                            color="indigo"
+                        />
 
-                    {/* API Usage Chart */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <FaChartBar size={40} className="text-teal-600 mb-4" />
-                        <h2 className="text-lg font-medium text-gray-800 mb-4">API Usage</h2>
-                        <BarChart
-                            width={300}
-                            height={200}
-                            data={apiUsageChartData}
-                            margin={{
-                                top: 20,
-                                right: 30,
-                                left: 20,
-                                bottom: 5,
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="endpoint" angle={-45} textAnchor="end" interval={0} />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="count" fill="#8884d8" />
-                        </BarChart>
-                    </div>
+                        {/* Alerts Card */}
+                        <StatCard
+                            icon={<FaBell />}
+                            label="Alerts"
+                            value={alertsData.length}
+                            color="red"
+                        />
 
-                    {/* Devices Overview */}
-                    <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-                        <FaCar size={40} className="text-indigo-600 mb-4" />
-                        <h2 className="text-lg font-medium text-gray-800 mb-2">Devices</h2>
-                        <ul className="mt-2 space-y-2 text-center">
-                            <li className="text-sm text-gray-600">
-                                Total Devices: <span className="font-bold">{devicesData.length}</span>
-                            </li>
-                        </ul>
-                    </div>
+                        {/* Vehicles Summary Card */}
+                        <StatCard
+                            icon={<FaCar />}
+                            label="Vehicles by Type"
+                            value={vehiclesData.length}
+                            color="green"
+                        />
 
-                    {/* User Activities Overview */}
-                    <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-                        <FaChartBar size={40} className="text-yellow-600 mb-4" />
-                        <h2 className="text-lg font-medium text-gray-800 mb-2">User Activities</h2>
-                        <ul className="mt-2 space-y-2 text-center">
-                            <li className="text-sm text-gray-600">
-                                Total Activities:{" "}
-                                <span className="font-bold">{userActivitiesData.length}</span>
-                            </li>
-                            <li className="text-sm text-gray-600">
-                                Recent Activities:
-                                <ul className="list-disc ml-4">
-                                    {userActivitiesData.slice(0, 5).map((activity, index) => (
-                                        <li key={index}>
-                                            Entry: {activity.entry_time}, Exit: {activity.exit_time}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </li>
-                        </ul>
+                        {/* API Usage Summary Card */}
+                        <StatCard
+                            icon={<FaChartBar />}
+                            label="API Usage"
+                            value={apiUsageData.length}
+                            color="teal"
+                        />
+
+                        {/* User Activities Card */}
+                        <StatCard
+                            icon={<FaChartBar />}
+                            label="User Activities"
+                            value={userActivitiesData.length}
+                            color="yellow"
+                        />
                     </div>
-                </div>
-            </main>
+                </main>
+            </div>
         </div>
     );
 };
+
+const StatCard = ({ icon, label, value, subLabel, color = "blue" }) => (
+    <div className="bg-white rounded-lg shadow-md p-5 transition hover:shadow-lg">
+        <div className={`text-${color}-600 text-3xl mb-2`}>{icon}</div>
+        <h3 className="text-lg font-semibold text-gray-800">{label}</h3>
+        <p className="text-2xl font-bold text-gray-700">{value}</p>
+        {subLabel && <p className="text-sm text-gray-500 mt-1">{subLabel}</p>}
+    </div>
+);
 
 export default Overview;

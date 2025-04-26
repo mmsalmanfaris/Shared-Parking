@@ -105,8 +105,6 @@ def create_user(user_data: userModel):
         auth.set_custom_user_claims(user.uid, {
             "role": "user"
         })
-
-        print(user.uid)
         
         # Store user details in Firestore
         user_ref = _db.collection("User").document(user.uid)
@@ -118,7 +116,7 @@ def create_user(user_data: userModel):
             "created_at": firestore.SERVER_TIMESTAMP
         })
 
-        return {"message": "User created successfully", "user_id": user.uid}  # Return user.uid
+        return {"message": "User created successfully", "user_id": user.uid}
 
     except Exception as e:
         raise ValueError(f"Error during registration service: {str(e)}")

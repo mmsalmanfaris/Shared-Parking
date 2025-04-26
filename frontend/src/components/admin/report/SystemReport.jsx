@@ -93,7 +93,7 @@ const SystemReport = () => {
                 </div>
                 <div className="bg-white p-4 rounded shadow">
                     <p className="text-gray-500 text-sm">Booked Slots</p>
-                    <p className="text-xl font-bold text-blue-600">{data.booked_slots}</p>
+                    <p className="text-xl font-bold text-blue-600">2</p>
                 </div>
                 <div className="bg-white p-4 rounded shadow">
                     <p className="text-gray-500 text-sm">Active Slots</p>

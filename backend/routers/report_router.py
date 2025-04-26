@@ -8,35 +8,26 @@ router = APIRouter()
 
 @router.get("/system-usage")
 def get_system_usage():
-    """
-    Fetch system usage metrics such as total slots, booked slots, active users, etc.
-    """
+
     try:
-        # Fetch total slots
         total_slots = _db.collection("Slot").stream()
         total_slot_count = sum(1 for _ in total_slots)
 
-        # Fetch booked slots (slots with active bookings)
         booked_slots = _db.collection("Booking").where("is_active", "==", "true").stream()
         booked_slot_count = sum(1 for _ in booked_slots)
 
-        # Fetch active slots (slots marked as active)
         active_slots = _db.collection("Slot").where("status", "==", "active").stream()
         active_slot_count = sum(1 for _ in active_slots)
 
-        # Fetch inactive slots (slots marked as maintenance)
         inactive_slots = _db.collection("Slot").where("status", "==", "maintenance").stream()
         inactive_slot_count = sum(1 for _ in inactive_slots)
 
-        # Fetch total users
         total_users = _db.collection("User").stream()
         total_user_count = sum(1 for _ in total_users)
 
-        # Fetch total bookings
         total_bookings = _db.collection("Booking").stream()
         total_booking_count = sum(1 for _ in total_bookings)
 
-        # Calculate booking usage percentage
         booking_usage_percent = (
             round((booked_slot_count / total_slot_count) * 100, 2) if total_slot_count else 0
         )
@@ -67,13 +58,11 @@ def get_system_usage():
 
 @router.get("/users")
 def get_users():
-    """
-    Fetch user details including their vehicles, active booking status, and last login time.
-    """
+
     try:
-        users_ref = _db.collection("User").stream()  # Fetch all users from Firestore
-        vehicles_ref = _db.collection("Vehicle")  # Reference to the Vehicle collection
-        bookings_ref = _db.collection("Booking")  # Reference to the Booking collection
+        users_ref = _db.collection("User").stream()
+        vehicles_ref = _db.collection("Vehicle")
+        bookings_ref = _db.collection("Booking")
 
         users = []
         for user in users_ref:
@@ -95,7 +84,7 @@ def get_users():
                 if len(active_bookings) > 0:
                     is_active = True
                     print(f"Active booking found for user {user_id}, vehicle {vehicle_id}")
-                    break  # Stop checking if we find at least one active booking
+                    break 
 
             # Step 3: Get the last login time from Firebase Auth
             try:
@@ -104,7 +93,7 @@ def get_users():
                 if last_login_timestamp:
                     last_login = datetime.utcfromtimestamp(last_login_timestamp / 1000).strftime(
                         "%Y-%m-%d %H:%M:%S"
-                    )  # Convert to human-readable format
+                    )
                 else:
                     last_login = None
             except Exception as e:
@@ -178,10 +167,7 @@ def get_vehicles():
 
 @router.get("/bookings")
 def get_bookings():
-    """
-    Fetch all bookings along with their details.
-    Includes aggregated data for payment status distribution and bookings per day.
-    """
+
     try:
         # Reference to the Booking collection in Firestore
         bookings_ref = _db.collection("Booking").stream()
@@ -240,9 +226,7 @@ def get_bookings():
 
 @router.get("/api-usage")
 def get_api_usage(start_date: str = None, end_date: str = None):
-    """
-    Fetch API usage data within a date range.
-    """
+
     try:
         # Reference to the ApiUsage collection in Firestore
         api_usage_ref = _db.collection("ApiUsage")
@@ -352,15 +336,15 @@ async def get_alerts():
     """
     try:
         alerts_ref = _db.collection("Alert")
-        alerts_snapshot = alerts_ref.order_by("timestamp", direction="DESCENDING").limit(10).stream()
 
         alerts_data = []
-        for doc in alerts_snapshot:
+        for doc in alerts_ref.stream():
             alert = doc.to_dict()
             alerts_data.append({
+                "id": doc.id,
                 "detected_slot": alert.get("detected_slot"),
-                "status": alert.get("staus"),
-                "timestamp": alert.get("time"),
+                "status": alert.get("status"),
+                "time": alert.get("time"),
             })
 
         return alerts_data
@@ -368,12 +352,12 @@ async def get_alerts():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred while fetching alerts data: {str(e)}")
 
-# ---------------------- API USAGE API ----------------------
+
+
+
 @router.get("/overview/api-usage", response_model=list[dict])
 async def get_api_usage():
-    """
-    Fetches API usage data from Firestore for the API Usage Chart.
-    """
+
     try:
         api_usage_ref = _db.collection("ApiUsage")
         api_usage_snapshot = api_usage_ref.order_by("timestamp", direction="DESCENDING").limit(100).stream()
@@ -394,7 +378,8 @@ async def get_api_usage():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred while fetching API usage data: {str(e)}")
 
-# ---------------------- DEVICES API ----------------------
+
+
 @router.get("/overview/devices", response_model=list[dict])
 async def get_devices():
     """
@@ -417,14 +402,12 @@ async def get_devices():
         raise HTTPException(status_code=500, detail=f"An error occurred while fetching devices data: {str(e)}")
 
 
-# ---------------------- Useractivites API ----------------------
+
 @router.get("/overview/activites", response_model=list[dict])
 async def get_devices():
-    """
-    Fetches device data from Firestore for the Devices Overview section.
-    """
+
     try:
-        devices_ref = _db.collection("UserActivites")
+        devices_ref = _db.collection("UserActivities")
         devices_snapshot = devices_ref.stream()
 
         devices_data = []

@@ -209,7 +209,7 @@ const ApiReport = () => {
                     <div className="mb-8">
                         <h3 className="text-xl font-semibold text-gray-800 mb-4">Requests Per Endpoint</h3>
                         <BarChart
-                            width={1250}
+                            width={1100}
                             height={400}
                             data={chartData}
                             margin={{

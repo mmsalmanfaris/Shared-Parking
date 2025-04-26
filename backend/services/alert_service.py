@@ -2,7 +2,6 @@ from config.firebase_config import _db
 
 def get_all_alerts():
     try:
-        # Fetch all activities from the UserActivities collection
         alerts_ref = _db.collection("Alert").stream()
         alerts = []
 
@@ -12,7 +11,6 @@ def get_all_alerts():
             alert_data = alert_doc.to_dict()
             print(F"SECOND", alert_data)
 
-            # Extract booking_id from the activity
             booking_id = alert_data.get("booking_id")
 
             # Fetch the corresponding booking document from the Booking collection
@@ -20,7 +18,7 @@ def get_all_alerts():
 
             if booking_doc.exists:
                 booking_data = booking_doc.to_dict()
-                booking_code = booking_data.get("booking_code", "N/A")  # Default to "N/A" if booking_code is missing
+                booking_code = booking_data.get("booking_code", "N/A")
             else:
                 booking_code = "N/A"  # Handle case where booking document does not exist
 

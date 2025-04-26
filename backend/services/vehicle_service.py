@@ -51,7 +51,6 @@ def get_all_vehicles():
 
 def get_vehicle_by_user(user_id: str) -> list[vehicle_Response]:
     try:
-        # Filter where 'user_id' field matches
         vehicles_ref = _db.collection("Vehicle").where("user_id", "==", user_id).stream()
 
         vehicles = []
@@ -68,9 +67,7 @@ def get_vehicle_by_user(user_id: str) -> list[vehicle_Response]:
             }
 
             vehicles.append(vehicle_Response(**vehicle_data))
-
         return vehicles
-
     except Exception as e:
         raise ValueError(f"Error fetching vehicles for user: {str(e)}")
     
