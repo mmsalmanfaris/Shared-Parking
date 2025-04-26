@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { MdOutlinePayments } from "react-icons/md";
 import { IoCarOutline } from "react-icons/io5";
+import { LuCircleParking } from "react-icons/lu";
 
 const sidebar = () => {
     return (
@@ -30,6 +31,16 @@ const sidebar = () => {
                             <Link to="../user-dashboard/vehicles" class="flex items-center">
                                 <IoCarOutline className='text-xl me-3' />
                                 Vehicles
+                            </Link>
+                        </button>
+                    </div>
+
+                    {/* <!-- Team Dropdown --> */}
+                    <div class="space-y-1">
+                        <button class="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none" aria-expanded="false" aria-controls="team-dropdown">
+                            <Link to="../user-dashboard/booking" class="flex items-center">
+                                <LuCircleParking className='text-xl me-3' />
+                                Booking
                             </Link>
                         </button>
                     </div>

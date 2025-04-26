@@ -23,6 +23,7 @@ import UserVehicles from "../pages/userDashboard/vehicles";
 import UserHistory from "../pages/userDashboard/history";
 import UserPayments from "../pages/userDashboard/payments";
 import UserReports from "../pages/userDashboard/reports";
+import UserBooking from "../pages/userDashboard/booking";
 
 
 const ProtectedRoutes = () => {
@@ -118,6 +119,11 @@ const ProtectedRoutes = () => {
             <Route path="/user-dashboard/reports" element={
                 <ProtectedUserRoute requiredRole="user">
                     <UserReports />
+                </ProtectedUserRoute>
+            } />
+            <Route path="/user-dashboard/booking" element={
+                <ProtectedUserRoute requiredRole="user">
+                    <UserBooking />
                 </ProtectedUserRoute>
             } />
 

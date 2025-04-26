@@ -20,6 +20,7 @@ def user_creation(user_data: user_Model):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error during user creation: {str(e)}")
     
+    
 @router.get("/")
 def get_all_user_list():
     try:
