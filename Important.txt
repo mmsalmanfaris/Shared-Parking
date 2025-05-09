@@ -1,8 +1,17 @@
 Before starting the Live Detection need to enter hte venv
 
+<----Detection----->
 cd D:\Degree\Project\system\detection
 venv310\Scripts\activate
+python main.py
 
+<----Frontend----->
+npm run dev
+
+
+<----Backend----->
+.venv\Scripts\activate
+uvicorn main:app --host 0.0.0.0 --port 8000
 
 
 

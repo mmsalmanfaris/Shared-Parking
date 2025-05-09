@@ -331,9 +331,7 @@ async def get_bookings():
 # ---------------------- ALERTS API ----------------------
 @router.get("/overview/alerts", response_model=list[dict])
 async def get_alerts():
-    """
-    Fetches alert data from Firestore for the Alerts Overview section.
-    """
+
     try:
         alerts_ref = _db.collection("Alert")
 

@@ -9,7 +9,7 @@ router = APIRouter()
 class PlateData(BaseModel):
     plate: str
 
-ESP32_IP = "http://192.168.8.142"  # Update with your ESP32 IP
+ESP32_IP = "http://192.168.60.111"  # Nrework IP Address to communicate
 
 @router.post("/")
 async def process_plate(data: PlateData):

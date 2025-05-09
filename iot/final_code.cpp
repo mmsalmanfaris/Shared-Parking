@@ -6,13 +6,13 @@
 #include <HTTPClient.h>
 
 // WiFi credentials
-const char* ssid = "Digital Partner";
-const char* password = "56B5E807";
+const char* ssid = "Galaxy";
+const char* password = "0987654321";
 
-// Backend API URLs
-const char* backend_match_url = "http://192.168.8.119:8000/api/iot/status";
-const char* backend_mismatch_url = "http://192.168.8.119:8000/api/iot/mismatch";
-const char* backend_exit_url = "http://192.168.8.119:8000/api/iot/exit";
+// Backend API URLs Laptop IP Address
+const char* backend_match_url = "http://192.168.60.105:8000/api/iot/status";
+const char* backend_mismatch_url = "http://192.168.60.105:8000/api/iot/mismatch";
+const char* backend_exit_url = "http://192.168.60.105:8000/api/iot/exit";
 
 // Server and peripherals
 AsyncWebServer server(80);
@@ -21,7 +21,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // IR sensor pins and slot names
 const int irPins[4] = {12, 13, 4, 0};
-String irSlotNames[4] = {"SLOT2", "SLOT3", "SLOT5", "SLOT6"};
+String irSlotNames[4] = {"SLOT2", "SLOT3", "SLOT5", "+6"};
 
 // State tracking
 String bookingIds[4] = {"", "", "", ""};
